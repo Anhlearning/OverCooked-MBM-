@@ -1,18 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
 
 public class PlayerInput : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    PlayerInputActions playerInputActions;
+    private  void Awake() 
     {
-        
+        playerInputActions = new PlayerInputActions();
+        playerInputActions.Player.Enable();
+
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public UnityEngine.Vector2 GetMovementVectorNormolized(){
+        UnityEngine.Vector2 inputVector = playerInputActions.Player.Move.ReadValue<UnityEngine.Vector2>();
+        inputVector = inputVector.normalized;
+
+        return inputVector;
     }
 }
