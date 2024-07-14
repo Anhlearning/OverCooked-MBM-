@@ -15,7 +15,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Interaction",
+                    "name": "Interact",
                     "type": "Button",
                     "id": "c78d1519-155b-4815-916e-3c389732b82e",
                     "expectedControlType": "Button",
@@ -24,7 +24,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "InteractionAlternal",
+                    "name": "InteractAlternal",
                     "type": "Button",
                     "id": "baf5f6f3-29e6-45ef-ba06-b8ecc32d8244",
                     "expectedControlType": "Button",
@@ -96,7 +96,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Interaction",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -107,7 +107,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "InteractionAlternal",
+                    "action": "InteractAlternal",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
