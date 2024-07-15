@@ -100,8 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bc832a0dcb8db7498767adca57fbd64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  kitChenPrefab: {fileID: 3812876574508226176, guid: 81e9fe7b3cd084242a088e945f531f38,
-    type: 3}
+  kitchenObjectSO: {fileID: 11400000, guid: 39ce4f121ef3d19489f4ed27422c5354, type: 2}
   counterTopPoint: {fileID: 2358152339991661117}
 --- !u!1001 &4267680525496726095
 PrefabInstance:

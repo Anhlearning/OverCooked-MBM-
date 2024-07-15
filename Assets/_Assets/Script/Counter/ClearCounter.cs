@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClearCounter : MonoBehaviour
+public class ClearCounter : BaseCounter
 {
-    [SerializeField] private Transform kitChenPrefab;
-    [SerializeField] private Transform counterTopPoint;
-    public void Interact(){
-        Instantiate(kitChenPrefab,counterTopPoint);    
-    }
+    [SerializeField] private KitchenObjectSO kitchenObjectSO;
 
+    public override void Interact(Player player){
+        if(!HasIsKitchenObject()){
+            if(player.HasIsKitchenObject()){
+                player.GetKitchenObject().SetKitchenObjectParent(this);
+            }
+        }
+    }
 }

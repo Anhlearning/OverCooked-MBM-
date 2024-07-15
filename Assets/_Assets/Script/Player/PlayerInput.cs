@@ -25,7 +25,7 @@ public class PlayerInput : MonoBehaviour
     public UnityEngine.Vector2 GetMovementVectorNormolized(){
         UnityEngine.Vector2 inputVector = playerInputActions.Player.Move.ReadValue<UnityEngine.Vector2>();
         inputVector = inputVector.normalized;
-
+        
         return inputVector;
     }
 }
