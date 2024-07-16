@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 7192264927095897090}
   - component: {fileID: 3530731885757021166}
   - component: {fileID: 5818836153283181118}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ClearCounter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,8 +100,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bc832a0dcb8db7498767adca57fbd64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  kitchenObjectSO: {fileID: 11400000, guid: 39ce4f121ef3d19489f4ed27422c5354, type: 2}
   counterTopPoint: {fileID: 2358152339991661117}
+  kitchenObjectSO: {fileID: 11400000, guid: 39ce4f121ef3d19489f4ed27422c5354, type: 2}
 --- !u!1001 &4267680525496726095
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -224,7 +224,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedCounter: {fileID: 5818836153283181118}
-  visualGameObject: {fileID: 5689771304116875520}
+  visualGameObject:
+  - {fileID: 5689771304116875520}
 --- !u!1 &5689771304116875520 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8489276541531669327, guid: 0004cb1e11ad014419b943c7da960724,

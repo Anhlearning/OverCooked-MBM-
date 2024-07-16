@@ -8,6 +8,9 @@ public class BaseCounter : MonoBehaviour,IKitchenObjectParent
     [SerializeField] protected Transform counterTopPoint;
 
     private KitChenObject kitChenObject;
+    public virtual void InteractAlternate(Player player){
+        
+    }
     public virtual void Interact(Player player){
 
     }

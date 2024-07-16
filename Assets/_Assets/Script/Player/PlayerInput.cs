@@ -9,12 +9,19 @@ public class PlayerInput : MonoBehaviour
 {
     private PlayerInputActions playerInputActions;
     public event EventHandler OnInteraction;
+    public event EventHandler OnInteractAlternal;
 
     private  void Awake() 
     {
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
         playerInputActions.Player.Interact.performed+=Interact_performed;
+        playerInputActions.Player.InteractAlternal.performed+=InteracAlternal_performed;
+    }
+
+    private void InteracAlternal_performed(InputAction.CallbackContext context)
+    {
+        OnInteractAlternal?.Invoke(this,EventArgs.Empty);
     }
 
     private void Interact_performed(InputAction.CallbackContext context)

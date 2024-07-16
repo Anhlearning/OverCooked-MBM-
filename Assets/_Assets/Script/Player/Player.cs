@@ -34,6 +34,14 @@ public class Player : MonoBehaviour,IKitchenObjectParent
         Instance = this;
         characterController=GetComponent<CharacterController>();
         playerInput.OnInteraction+= GameInput_Onteraction;
+        playerInput.OnInteractAlternal+=GameInput_OnInteracAlternal;
+    }
+
+    private void GameInput_OnInteracAlternal(object sender, EventArgs e)
+    {
+        if(selectedCounter !=null){
+            selectedCounter.InteractAlternate(this);
+        }
     }
 
     private void GameInput_Onteraction(object sender, EventArgs e)
