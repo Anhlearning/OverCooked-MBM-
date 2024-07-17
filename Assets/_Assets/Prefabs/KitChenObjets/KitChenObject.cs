@@ -32,6 +32,7 @@ public class KitChenObject : MonoBehaviour
     }
     public static KitChenObject SpawnKitchenObject(KitchenObjectSO kitchenObjectSO,IKitchenObjectParent kitchenObjectParent){
         Transform kitchenObjectTransfom = Instantiate(kitchenObjectSO.prefab);
+        kitchenObjectTransfom.localPosition=Vector3.zero;
         KitChenObject kitChenObject = kitchenObjectTransfom.GetComponent<KitChenObject>();
         kitChenObject.SetKitchenObjectParent(kitchenObjectParent);
         return kitChenObject;
