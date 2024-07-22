@@ -3,14 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CuttingCounter : BaseCounter
+public class CuttingCounter : BaseCounter,IProgressBar
 {
    [SerializeField] private CuttingKitchenSO[] listCuttingKitchen ;
-    public event EventHandler<ProgressBarEvent>ProgressBar;
-    public event EventHandler OnCut;
-    public class ProgressBarEvent : EventArgs{
-        public float  progressNomalize;
-    }
+   public event EventHandler <IProgressBar.ProgressBarEvent> ProgressBar;
+   public event EventHandler OnCut;
    private int CuttingProgess;
     public override void Interact(Player player){
         if(!HasIsKitchenObject()){
@@ -18,7 +15,7 @@ public class CuttingCounter : BaseCounter
                 player.GetKitchenObject().SetKitchenObjectParent(this);
                 CuttingProgess=0;
                 CuttingKitchenSO cuttingKitchenSO = GettingCuttingKichen(GetKitchenObject().GetKitchenObjectSO());
-                ProgressBar?.Invoke(this,new ProgressBarEvent{
+                ProgressBar?.Invoke(this,new IProgressBar.ProgressBarEvent{
                     progressNomalize=(float)CuttingProgess/cuttingKitchenSO.CuttingProgess
                 });
             }
@@ -40,7 +37,7 @@ public class CuttingCounter : BaseCounter
                 CuttingProgess++;
                 OnCut?.Invoke(this,EventArgs.Empty);
                 CuttingKitchenSO cuttingKitchenSO = GettingCuttingKichen(GetKitchenObject().GetKitchenObjectSO());
-                 ProgressBar?.Invoke(this,new ProgressBarEvent{
+                 ProgressBar?.Invoke(this,new IProgressBar.ProgressBarEvent{
                     progressNomalize=(float)CuttingProgess/cuttingKitchenSO.CuttingProgess
                 });
                 if(CuttingProgess >= cuttingKitchenSO.CuttingProgess){

@@ -5,16 +5,21 @@ using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NewBehaviourScript : MonoBehaviour
-{
+public class ProgressBarUI : MonoBehaviour
+{   
+    [SerializeField] private GameObject hasProgressBarGameObject;
     [SerializeField] private Image Bar;
-    [SerializeField] private CuttingCounter cuttingCounter; 
+    private IProgressBar hasProgress; 
     private void Awake() {
-        cuttingCounter.ProgressBar+= ProgressBar_OnChange;
+        hasProgress=hasProgressBarGameObject.GetComponent<IProgressBar>();
+        if(hasProgress ==null){
+            Debug.LogError(gameObject.name +"no hasProgress");
+        }
+        hasProgress.ProgressBar+= ProgressBar_OnChange;
         gameObject.SetActive(false);
     }
 
-    private void ProgressBar_OnChange(object sender, CuttingCounter.ProgressBarEvent e)
+    private void ProgressBar_OnChange(object sender, IProgressBar.ProgressBarEvent e)
     {
         Bar.fillAmount=e.progressNomalize;
 
