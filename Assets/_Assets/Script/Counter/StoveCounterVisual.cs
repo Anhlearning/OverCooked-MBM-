@@ -16,7 +16,7 @@ public class StoveCounterVisual : MonoBehaviour
 
     private void OnFryringChange(object sender, StoveCounter.OnStateChangeEvents e)
     {
-        onFryring=(e.state==StoveCounter.State.Fyring|| e.state==StoveCounter.State.Fired);
+        onFryring=e.state==StoveCounter.State.Fyring|| e.state==StoveCounter.State.Fired;
         particle.SetActive(onFryring);
         StoveOnVisual.SetActive(onFryring);
     }
