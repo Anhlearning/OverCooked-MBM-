@@ -88,7 +88,7 @@ public class Player : MonoBehaviour,IKitchenObjectParent
         UnityEngine.Vector3 moveDir = new UnityEngine.Vector3(inputVector.x,0f,inputVector.y);
         float moveDistance = moveSpeed*Time.deltaTime;
         float playerHeight=2f;
-        float playerRadius=.7f;
+        float playerRadius=.5f;
 
         bool canMove= !Physics.CapsuleCast(transform.position,transform.position + UnityEngine.Vector3.up *playerHeight,playerRadius,moveDir,moveDistance);
         

@@ -8,13 +8,13 @@ public class CuttingCounter : BaseCounter,IProgressBar
    [SerializeField] private CuttingKitchenSO[] listCuttingKitchen ;
    public event EventHandler <IProgressBar.ProgressBarEvent> ProgressBar;
    public event EventHandler OnCut;
-   private int CuttingProgess;
+   private int CuttingProgess=0;
+   private CuttingKitchenSO cuttingKitchenSO;
     public override void Interact(Player player){
         if(!HasIsKitchenObject()){
             if(player.HasIsKitchenObject() && HasKitchenCuttingSO(player.GetKitchenObject().GetKitchenObjectSO())){
                 player.GetKitchenObject().SetKitchenObjectParent(this);
-                CuttingProgess=0;
-                CuttingKitchenSO cuttingKitchenSO = GettingCuttingKichen(GetKitchenObject().GetKitchenObjectSO());
+                cuttingKitchenSO = GettingCuttingKichen(GetKitchenObject().GetKitchenObjectSO());
                 ProgressBar?.Invoke(this,new IProgressBar.ProgressBarEvent{
                     progressNomalize=(float)CuttingProgess/cuttingKitchenSO.CuttingProgess
                 });
@@ -22,9 +22,16 @@ public class CuttingCounter : BaseCounter,IProgressBar
         }
         else {
             if(player.HasIsKitchenObject()){
-                //player is carrying object 
+                  if(player.GetKitchenObject().TryGetPlate( out PlatesKitchenObject plateKitchenObject)){
+                    if(plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO())){
+                        GetKitchenObject().DestroySelf();
+                    }
+                }
             }
             else {
+                ProgressBar?.Invoke(this,new IProgressBar.ProgressBarEvent{
+                    progressNomalize=0f
+                });
                 GetKitchenObject().SetKitchenObjectParent(player);
             }
         }
@@ -36,12 +43,13 @@ public class CuttingCounter : BaseCounter,IProgressBar
          if(HasIsKitchenObject() && HasKitchenCuttingSO(GetKitchenObject().GetKitchenObjectSO())){
                 CuttingProgess++;
                 OnCut?.Invoke(this,EventArgs.Empty);
-                CuttingKitchenSO cuttingKitchenSO = GettingCuttingKichen(GetKitchenObject().GetKitchenObjectSO());
+                // cuttingKitchenSO = GettingCuttingKichen(GetKitchenObject().GetKitchenObjectSO());
                  ProgressBar?.Invoke(this,new IProgressBar.ProgressBarEvent{
                     progressNomalize=(float)CuttingProgess/cuttingKitchenSO.CuttingProgess
                 });
                 if(CuttingProgess >= cuttingKitchenSO.CuttingProgess){
                     GetKitchenObject().DestroySelf();
+                    CuttingProgess=0;
                     KitChenObject.SpawnKitchenObject(cuttingKitchenSO.outputKitchen,this);
                }
 
