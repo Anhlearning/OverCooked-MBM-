@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class DeliveryCounter : BaseCounter
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void Interact(Player player)
     {
-        
-    }
+        if(!HasIsKitchenObject()){
+            if(player.GetKitchenObject().TryGetPlate(out PlatesKitchenObject platesKitchenObject)){
+                DeliveryManager.Instance.DeliveryRecipe(platesKitchenObject);
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+                player.GetKitchenObject().DestroySelf();
+            }
+        }
     }
 }
