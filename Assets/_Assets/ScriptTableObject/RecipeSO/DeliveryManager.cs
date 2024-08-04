@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class DeliveryManager : MonoBehaviour
 {   
+    public event EventHandler OnSpawnRecipe;
+    public event EventHandler OnRemoveRecipe;
     public static DeliveryManager Instance{get;set;}  
     [SerializeField] private RecipeSOList recipeSOList;
     private List<RecipeSO>wattingRecipeSOList;
@@ -19,9 +22,10 @@ public class DeliveryManager : MonoBehaviour
         if(timeSpawnRecipe<=0f){
             timeSpawnRecipe=timeSpawnRecipeMax;
             if(wattingRecipeSOList.Count < wattingRecipeSpawnMax){
-                RecipeSO recipeSOSpawn = recipeSOList.RecipeListSO[Random.Range(0,recipeSOList.RecipeListSO.Count)];
+                RecipeSO recipeSOSpawn = recipeSOList.RecipeListSO[UnityEngine.Random.Range(0,recipeSOList.RecipeListSO.Count)];
                 Debug.Log(recipeSOSpawn.RecipeName); 
                 wattingRecipeSOList.Add(recipeSOSpawn);
+                OnSpawnRecipe?.Invoke(this,EventArgs.Empty);
             }
             
         }
@@ -48,11 +52,15 @@ public class DeliveryManager : MonoBehaviour
                 }
                 if(checkKitchenObjectList){
                     Debug.Log("Recipe Correct");
+                    OnRemoveRecipe?.Invoke(this,EventArgs.Empty);
                     wattingRecipeSOList.RemoveAt(i);
                     return;
                 }
             }
         }
         Debug.Log("Recipe Give DeliveryCounter Not correct");
+    }
+    public List<RecipeSO> GetListRecipeSO(){
+        return wattingRecipeSOList;
     }
 }
