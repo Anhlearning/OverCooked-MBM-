@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class DeliveryManager : MonoBehaviour
 {   
+    public event EventHandler DeliveryFalied;
+    public event EventHandler DeliverySuccees;
     public event EventHandler OnSpawnRecipe;
     public event EventHandler OnRemoveRecipe;
     public static DeliveryManager Instance{get;set;}  
@@ -53,11 +55,13 @@ public class DeliveryManager : MonoBehaviour
                 if(checkKitchenObjectList){
                     Debug.Log("Recipe Correct");
                     OnRemoveRecipe?.Invoke(this,EventArgs.Empty);
+                    DeliverySuccees?.Invoke(this,EventArgs.Empty);
                     wattingRecipeSOList.RemoveAt(i);
                     return;
                 }
             }
         }
+        DeliveryFalied?.Invoke(this,EventArgs.Empty);
         Debug.Log("Recipe Give DeliveryCounter Not correct");
     }
     public List<RecipeSO> GetListRecipeSO(){

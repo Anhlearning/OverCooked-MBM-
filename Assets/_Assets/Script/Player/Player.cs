@@ -10,6 +10,7 @@ using System;
 public class Player : MonoBehaviour,IKitchenObjectParent
 {
     // Start is called before the first frame update
+    public event EventHandler PickUpObject;
     public event EventHandler<OnSelectedCounterChangeEventArgs> OnSelectedCounterChange;
 
     public class OnSelectedCounterChangeEventArgs : EventArgs{
@@ -131,6 +132,9 @@ public class Player : MonoBehaviour,IKitchenObjectParent
 
     public void SetKitchenObject(KitChenObject kitChenObject){
         this.kitchenObject=kitChenObject;
+        if(kitchenObject !=null){
+            PickUpObject?.Invoke(this,EventArgs.Empty);
+        }
     }
     public KitChenObject GetKitchenObject(){
         return kitchenObject;

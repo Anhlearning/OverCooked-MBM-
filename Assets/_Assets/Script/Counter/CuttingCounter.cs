@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class CuttingCounter : BaseCounter,IProgressBar
 {
+    
+   public static event EventHandler AnyOnCut; 
    [SerializeField] private CuttingKitchenSO[] listCuttingKitchen ;
    public event EventHandler <IProgressBar.ProgressBarEvent> ProgressBar;
    public event EventHandler OnCut;
@@ -43,6 +45,7 @@ public class CuttingCounter : BaseCounter,IProgressBar
          if(HasIsKitchenObject() && HasKitchenCuttingSO(GetKitchenObject().GetKitchenObjectSO())){
                 CuttingProgess++;
                 OnCut?.Invoke(this,EventArgs.Empty);
+                AnyOnCut?.Invoke(this,EventArgs.Empty);
                 // cuttingKitchenSO = GettingCuttingKichen(GetKitchenObject().GetKitchenObjectSO());
                  ProgressBar?.Invoke(this,new IProgressBar.ProgressBarEvent{
                     progressNomalize=(float)CuttingProgess/cuttingKitchenSO.CuttingProgess
