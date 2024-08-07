@@ -15,6 +15,7 @@ public class DeliveryManager : MonoBehaviour
     private float timeSpawnRecipe=4f;
     private float timeSpawnRecipeMax=4f;
     private int wattingRecipeSpawnMax=4;
+    private int recipeDelivery;
     private void Awake() {
         Instance=this;
         wattingRecipeSOList=new List<RecipeSO>();
@@ -56,6 +57,7 @@ public class DeliveryManager : MonoBehaviour
                     Debug.Log("Recipe Correct");
                     OnRemoveRecipe?.Invoke(this,EventArgs.Empty);
                     DeliverySuccees?.Invoke(this,EventArgs.Empty);
+                    recipeDelivery++;
                     wattingRecipeSOList.RemoveAt(i);
                     return;
                 }
@@ -66,5 +68,8 @@ public class DeliveryManager : MonoBehaviour
     }
     public List<RecipeSO> GetListRecipeSO(){
         return wattingRecipeSOList;
+    }
+    public int GetRecipeDelivery(){
+        return recipeDelivery;
     }
 }

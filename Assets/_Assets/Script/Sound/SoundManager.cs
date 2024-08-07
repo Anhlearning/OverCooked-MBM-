@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Schema;
 using UnityEngine;
 
 public class SoundManager : MonoBehaviour
@@ -53,7 +55,7 @@ public class SoundManager : MonoBehaviour
     }
 
     private void PlaySound(AudioClip[] audioClips,Vector3 position){
-        PlaySound(audioClips[Random.Range(0,audioClips.Length)],position);
+        PlaySound(audioClips[UnityEngine.Random.Range(0,audioClips.Length)],position);
     }
    private void PlaySound(AudioClip audioClip,Vector3 position,float volume=1){
         AudioSource.PlayClipAtPoint(audioClip,position,volume);
