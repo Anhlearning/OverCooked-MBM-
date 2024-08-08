@@ -9,6 +9,7 @@ public class DeliveryManager : MonoBehaviour
     public event EventHandler DeliverySuccees;
     public event EventHandler OnSpawnRecipe;
     public event EventHandler OnRemoveRecipe;
+
     public static DeliveryManager Instance{get;set;}  
     [SerializeField] private RecipeSOList recipeSOList;
     private List<RecipeSO>wattingRecipeSOList;
@@ -16,9 +17,11 @@ public class DeliveryManager : MonoBehaviour
     private float timeSpawnRecipeMax=4f;
     private int wattingRecipeSpawnMax=4;
     private int recipeDelivery;
+
     private void Awake() {
         Instance=this;
         wattingRecipeSOList=new List<RecipeSO>();
+       
     }
     private void Update() {
         timeSpawnRecipe-=Time.deltaTime;

@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-
+    public event EventHandler OnPauseMenu;
+    public event EventHandler OffPauseMenu;
     public static GameManager Instance {get;set;}
     public event EventHandler OnStateChange;
     public enum State {
@@ -20,9 +21,30 @@ public class GameManager : MonoBehaviour
     private float gamePlaying;
     private float gamePlayingMax=10f;
 
+    private bool isPause=false;
     private void Awake() {
         Instance=this;
         state=State.WattingToStart;
+    }
+    private void Start() {
+         PlayerInput.Instance.OnPauseGame += PlayerInput_Pause; 
+    }
+     private void PlayerInput_Pause(object sender, EventArgs e)
+    {
+        TogglePause();
+    }
+
+    public void TogglePause()
+    {
+        isPause=!isPause;
+        if(isPause){
+            OnPauseMenu?.Invoke(this,EventArgs.Empty);
+            Time.timeScale=0;
+        }
+        else {
+            OffPauseMenu?.Invoke(this,EventArgs.Empty);
+            Time.timeScale=1;
+        }
     }
     private void Update() {
         switch (state)

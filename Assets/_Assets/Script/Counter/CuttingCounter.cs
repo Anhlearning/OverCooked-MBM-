@@ -7,6 +7,10 @@ public class CuttingCounter : BaseCounter,IProgressBar
 {
     
    public static event EventHandler AnyOnCut; 
+
+   new public static void resetEventStatic(){
+        AnyOnCut=null;
+   }
    [SerializeField] private CuttingKitchenSO[] listCuttingKitchen ;
    public event EventHandler <IProgressBar.ProgressBarEvent> ProgressBar;
    public event EventHandler OnCut;
