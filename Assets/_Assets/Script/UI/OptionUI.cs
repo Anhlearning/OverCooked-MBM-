@@ -30,6 +30,8 @@ public class OptionUI : MonoBehaviour
 
     [SerializeField] private Button music;
     [SerializeField] private Button closeBtn;
+
+    private Action onCloseButtonAction;
     private void Awake() {
         Instance=this;
         HidePressKeyUI();
@@ -43,6 +45,7 @@ public class OptionUI : MonoBehaviour
         });
         closeBtn.onClick.AddListener(()=>{
             Hide();
+            onCloseButtonAction();
         });
         moveUpBnt.onClick.AddListener(()=>Rebinding(PlayerInput.Binding.MoveUp));
         moveDownBtn.onClick.AddListener(()=>Rebinding(PlayerInput.Binding.MoveDown));
@@ -79,8 +82,10 @@ public class OptionUI : MonoBehaviour
         pauseT.text=PlayerInput.Instance.GetBindingText(PlayerInput.Binding.Pause);
     }
 
-    public void Show(){
+    public void Show(Action OnCloseAction){
+        this.onCloseButtonAction=OnCloseAction;
         gameObject.SetActive(true);
+        soundEffect.Select();
     }
     public void Hide(){
         gameObject.SetActive(false);

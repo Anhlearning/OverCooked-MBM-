@@ -64,9 +64,9 @@ public class PlayerInput : MonoBehaviour
             case Binding.MoveDown:
                 return playerInputActions.Player.Move.bindings[2].ToDisplayString();
             case Binding.MoveLeft:
-                return playerInputActions.Player.Move.bindings[4].ToDisplayString();
-            case Binding.MoveRight:
                 return playerInputActions.Player.Move.bindings[3].ToDisplayString();
+            case Binding.MoveRight:
+                return playerInputActions.Player.Move.bindings[4].ToDisplayString();
             case Binding.Interact:
                 return playerInputActions.Player.Interact.bindings[0].ToDisplayString();
             case Binding.InteractAlt:
@@ -93,11 +93,11 @@ public class PlayerInput : MonoBehaviour
             break;
             case Binding.MoveLeft:
             playerInputNews=playerInputActions.Player.Move;
-            bindingIndx=4;
+            bindingIndx=3;
             break;
             case Binding.MoveRight:
             playerInputNews=playerInputActions.Player.Move;
-            bindingIndx=3;
+            bindingIndx=4;
             break;
             case Binding.Interact:
             playerInputNews=playerInputActions.Player.Interact;
