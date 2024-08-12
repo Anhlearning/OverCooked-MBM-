@@ -27,7 +27,7 @@ public class DeliveryManager : MonoBehaviour
         timeSpawnRecipe-=Time.deltaTime;
         if(timeSpawnRecipe<=0f){
             timeSpawnRecipe=timeSpawnRecipeMax;
-            if(wattingRecipeSOList.Count < wattingRecipeSpawnMax){
+            if(GameManager.Instance.IsGamePlaying()&&wattingRecipeSOList.Count < wattingRecipeSpawnMax){
                 RecipeSO recipeSOSpawn = recipeSOList.RecipeListSO[UnityEngine.Random.Range(0,recipeSOList.RecipeListSO.Count)];
                 Debug.Log(recipeSOSpawn.RecipeName); 
                 wattingRecipeSOList.Add(recipeSOSpawn);

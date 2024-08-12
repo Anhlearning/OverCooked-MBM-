@@ -8,7 +8,12 @@ using UnityEngine;
 public class GameCountDownUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI countDown;
-    
+    private const string Popup="OnPupop";
+    private Animator animator;
+    int countDownpre;
+    private void Awake() {
+        animator=GetComponent<Animator>();
+    }
     private void Start() {
         GameManager.Instance.OnStateChange += GameManager_OnStateChange;
         Hide();
@@ -24,7 +29,13 @@ public class GameCountDownUI : MonoBehaviour
         }
     }
     private void Update() {
-        countDown.text= math.ceil(GameManager.Instance.GetCountDownTime()).ToString();
+        int countDownInt= Mathf.CeilToInt(GameManager.Instance.GetCountDownTime());
+        countDown.text=countDownInt.ToString();
+        if(countDownpre != countDownInt){
+            countDownpre=countDownInt;
+            animator.SetTrigger(Popup);
+            SoundManager.Instance.PlayCountDownSound();
+        }
     }
 
     private void Hide(){

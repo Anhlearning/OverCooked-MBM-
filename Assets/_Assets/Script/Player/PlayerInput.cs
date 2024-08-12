@@ -12,6 +12,7 @@ public class PlayerInput : MonoBehaviour
     private PlayerInputActions playerInputActions;
     public event EventHandler OnInteraction;
     public event EventHandler OnInteractAlternal;
+    public event EventHandler OnChangeBinding;
     public enum Binding{
         MoveUp,
         MoveDown,
@@ -115,6 +116,7 @@ public class PlayerInput : MonoBehaviour
         playerInputNews.PerformInteractiveRebinding(bindingIndx).OnComplete(callback => {
             callback.Dispose();
             playerInputActions.Player.Enable();
+            OnChangeBinding?.Invoke(this,EventArgs.Empty);
             PlayerPrefs.SetString(Player_Input_Rebinding,playerInputActions.SaveBindingOverridesAsJson());
             PlayerPrefs.Save();
             OnRebounding();

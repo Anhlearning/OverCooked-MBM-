@@ -16,10 +16,9 @@ public class GameManager : MonoBehaviour
         GameOver
     }
     private State state;
-    private float wattingToStart=1f;
     private float countdowToStart=3f;
     private float gamePlaying;
-    private float gamePlayingMax=10f;
+    private float gamePlayingMax=50f;
 
     private bool isPause=false;
     private void Awake() {
@@ -27,9 +26,19 @@ public class GameManager : MonoBehaviour
         state=State.WattingToStart;
     }
     private void Start() {
-         PlayerInput.Instance.OnPauseGame += PlayerInput_Pause; 
+        PlayerInput.Instance.OnPauseGame += PlayerInput_Pause; 
+        PlayerInput.Instance.OnInteraction += GameManager_OnInteract;
     }
-     private void PlayerInput_Pause(object sender, EventArgs e)
+
+    private void GameManager_OnInteract(object sender, EventArgs e)
+    {
+        if(state==State.WattingToStart){
+            state=State.CountdownToStart;
+            OnStateChange?.Invoke(this,EventArgs.Empty);
+        }
+    }
+
+    private void PlayerInput_Pause(object sender, EventArgs e)
     {
         TogglePause();
     }
@@ -50,11 +59,6 @@ public class GameManager : MonoBehaviour
         switch (state)
         {
             case State.WattingToStart:
-            wattingToStart-=Time.deltaTime;
-            if(wattingToStart <=0){
-                state=State.CountdownToStart;
-                OnStateChange?.Invoke(this,EventArgs.Empty);
-            }
             break;
             case State.CountdownToStart:
             countdowToStart-=Time.deltaTime;

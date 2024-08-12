@@ -148,4 +148,7 @@ public class StoveCounter : BaseCounter,IProgressBar
         }
         return null;
     }
+    public bool isFried(){
+        return state==State.Fired;
+    }
 }

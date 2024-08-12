@@ -67,6 +67,9 @@ public class SoundManager : MonoBehaviour
    public void PlayPlayerSound(Vector3 position){
         PlaySound(audioClipRefSO.footStep,position);
    }
+   public void PlayCountDownSound(){
+        PlaySound(audioClipRefSO.warning,Vector3.zero);
+   }
    public void ChangeVolume(){
         volume+=.1f;
         if(volume >=1f ){
@@ -74,6 +77,9 @@ public class SoundManager : MonoBehaviour
         }
         PlayerPrefs.SetFloat(PLAYER_PREFS_SOUND_EFFECT_VOLUME,volume);
         PlayerPrefs.Save();
+   }
+   public void PlayWarningSound(Vector3 position){
+        PlaySound(audioClipRefSO.warning,position);
    }
    public float  getVolume(){
      return volume;
