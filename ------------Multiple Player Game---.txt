@@ -1,0 +1,31 @@
+------------Multiple Player Game-------------------
+
+-Netcode For game objects
+Host 
+Server 
+Client
+Class NetworkBehavior - IsOwner 
+NetworkBehaviour và isOwner
+**NetworkBehaviour: Là một lớp cơ sở mà bạn có thể kế thừa để tạo ra các script hoạt động trong môi trường mạng. Nó cung cấp nhiều tính năng và công cụ để đồng bộ hóa các hành vi và trạng thái của đối tượng giữa máy chủ và các client.
+
+**isOwner: Là một thuộc tính của NetworkBehaviour. Nó trả về một giá trị kiểu bool, cho biết liệu đối tượng mà script này gắn vào có thuộc quyền sở hữu của client hiện tại hay không.
+
+2. Cách isOwner Hoạt Động
+Trong một ứng dụng mạng, mỗi đối tượng có thể được sở hữu bởi một máy khách cụ thể. Chỉ có chủ sở hữu (owner) của đối tượng đó mới có quyền điều khiển đối tượng. Ví dụ, trong một trò chơi nhiều người chơi, mỗi người chơi sẽ sở hữu và điều khiển nhân vật của mình.
+
+Cụ thể hơn:
+Nếu isOwner trả về true, điều đó có nghĩa là client hiện tại (client đang chạy script này) là chủ sở hữu của đối tượng mà script này gắn vào.
+Nếu isOwner trả về false, nghĩa là client hiện tại không phải là chủ sở hữu, và có thể một client khác hoặc máy chủ đang kiểm soát đối tượng này.
+
+Implement: 
+1.setup Multipler Player
+-Install nets code
+-create Networkmanager and add component in player (networkobject and networkmonobehaivor)
+-fix error no instance of player 
+-tạo UI để test ting netcode host,ser,client
+2.Sync Movement 
+-fix movement both client and host
+-add component networktransform
+-Author mode và owner Mode
+
+
