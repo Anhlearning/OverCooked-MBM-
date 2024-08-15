@@ -32,7 +32,7 @@ public class Player : MonoBehaviour,IKitchenObjectParent
     
     private void Awake()
     {   
-        Instance = this;
+        // Instance = this;
         characterController=GetComponent<CharacterController>();
         playerInput.OnInteraction+= GameInput_Onteraction;
         playerInput.OnInteractAlternal+=GameInput_OnInteracAlternal;

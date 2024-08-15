@@ -6,17 +6,17 @@ namespace QFSW.QC.Extras
 {
     public static class ScreenCommands
     {
-        [Command("fullscreen", "fullscreen state of the application.")]
+        [Command("fullscreen", "Get or set the fullscreen state of the application.")]
         private static bool Fullscreen
         {
             get => Screen.fullScreen;
             set => Screen.fullScreen = value;
         }
 
-        [Command("screen-dpi", "dpi of the current device's screen.")]
+        [Command("screen-dpi", "Get the DPI of the current device's screen.")]
         private static float DPI => Screen.dpi;
 
-        [Command("screen-orientation", "the orientation of the screen.")]
+        [Command("screen-orientation", "Get or set the orientation of the screen.")]
         [CommandPlatform(Platform.MobilePlatforms)]
         private static ScreenOrientation Orientation
         {
@@ -24,20 +24,18 @@ namespace QFSW.QC.Extras
             set => Screen.orientation = value;
         }
 
-        [Command("current-resolution", "current resolution of the application or window.")]
+        [Command("current-resolution", "Get the current resolution of the application or window.")]
         private static Resolution GetCurrentResolution()
         {
-            Resolution resolution = new Resolution
+            return new Resolution
             {
                 width = Screen.width,
                 height = Screen.height,
                 refreshRate = Screen.currentResolution.refreshRate
             };
-
-            return resolution;
         }
 
-        [Command("supported-resolutions", "all resolutions supported by this device in fullscreen mode.")]
+        [Command("supported-resolutions", "Get all resolutions supported by this device in fullscreen mode.")]
         [CommandPlatform(Platform.AllPlatforms ^ Platform.WebGLPlayer)]
         private static IEnumerable<Resolution> GetSupportedResolutions()
         {
@@ -47,27 +45,25 @@ namespace QFSW.QC.Extras
             }
         }
 
-        [Command("set-resolution")]
-        private static void SetResolution(int x, int y)
+        [Command("set-resolution", "Set the resolution of the current application. Optionally, set the fullscreen state as well.")]
+        private static void SetResolution(int width, int height, bool fullscreen = false)
         {
-            SetResolution(x, y, Screen.fullScreen);
+            Screen.SetResolution(width, height, fullscreen);
         }
 
-        [Command("set-resolution", "sets the resolution of the current application, optionally setting the fullscreen state too.")]
-        private static void SetResolution(int x, int y, bool fullscreen)
-        {
-            Screen.SetResolution(x, y, fullscreen);
-        }
-
-        [Command("capture-screenshot")]
-        [CommandDescription("Captures a screenshot and saves it to the supplied file path as a PNG.\n" +
-                            "If superSize is supplied the screenshot will be captured at a higher than native resolution.")]
+        [Command("capture-screenshot", "Capture a screenshot and save it to the supplied file path as a PNG. If superSize is supplied, the screenshot will be captured at a higher than native resolution.")]
         private static void CaptureScreenshot(
             [CommandParameterDescription("The name of the file to save the screenshot in")] string filename,
-            [CommandParameterDescription("Factor by which to increase resolution")] int superSize = 1
-        )
+            [CommandParameterDescription("Factor by which to increase resolution")] int superSize = 1)
         {
-            ScreenCapture.CaptureScreenshot(filename, superSize);
+            try
+            {
+                ScreenCapture.CaptureScreenshot(filename, superSize);
+            }
+            catch (System.Exception ex)
+            {
+                Debug.LogError($"Failed to capture screenshot: {ex.Message}");
+            }
         }
     }
 }

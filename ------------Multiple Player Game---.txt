@@ -27,5 +27,15 @@ Implement:
 -fix movement both client and host
 -add component networktransform
 -Author mode và owner Mode
-
-
+3.Sync Animator
+-add component Animator Authorivate Owner() 
+4.Sync Delivery Manager
+-Sync = Client RPC -> từ client gọi lên server để cập nhật bằng hàm RecipeClient 
+Note: RPC không đồng bộ hóa được các dữ liệu khác ngoài value Type. Có nghĩa là khi truyền tham số vào hàm có RPC thì tham số phải là kiểu value type
+-Sync DeliveryCorrect = Server RPC + Client RPC
+5.Fix Selected CounterVisual 
+-Use Method OnSpawnNetWork
+-Use static event (OnAnyPlayerSpawned) to check when player Spawn
+-Remove Static event khi load scene
+6.Player Pickup sync
+-Create Class and object KitchenGameMultiplayer : NEtworkBehavior (task SpawnKitchenObject)
