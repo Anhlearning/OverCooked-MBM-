@@ -16,9 +16,9 @@ public class GameManager : MonoBehaviour
         GameOver
     }
     private State state;
-    private float countdowToStart=3f;
+    private float countdowToStart=1f;
     private float gamePlaying;
-    private float gamePlayingMax=50f;
+    private float gamePlayingMax=300f;
 
     private bool isPause=false;
     private void Awake() {
@@ -28,10 +28,14 @@ public class GameManager : MonoBehaviour
     private void Start() {
         PlayerInput.Instance.OnPauseGame += PlayerInput_Pause; 
         PlayerInput.Instance.OnInteraction += GameManager_OnInteract;
+
+        state=State.CountdownToStart;
+        OnStateChange?.Invoke(this,EventArgs.Empty);
     }
 
     private void GameManager_OnInteract(object sender, EventArgs e)
     {
+        Debug.Log("Game Interact Press E");
         if(state==State.WattingToStart){
             state=State.CountdownToStart;
             OnStateChange?.Invoke(this,EventArgs.Empty);

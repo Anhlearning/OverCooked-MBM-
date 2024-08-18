@@ -7,19 +7,20 @@ using Vector2 = UnityEngine.Vector2;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using System;
-public class Player : MonoBehaviour,IKitchenObjectParent
+using Unity.Netcode;
+using System.Globalization;
+public class Player : NetworkBehaviour,IKitchenObjectParent
 {
     // Start is called before the first frame update
     public event EventHandler PickUpObject;
     public event EventHandler<OnSelectedCounterChangeEventArgs> OnSelectedCounterChange;
 
-    public class OnSelectedCounterChangeEventArgs : EventArgs{
+    public class OnSelectedCounterChangeEventArgs : EventArgs
+    {
         public BaseCounter selectedCounter;
-
     }
-
-    public static Player Instance {get;private set;}
-    [SerializeField] private PlayerInput playerInput;
+    //public static Player Instance {get;private set;}
+    //[SerializeField] private PlayerInput playerInput;
     [SerializeField] private float moveSpeed=7f;
     [SerializeField] private LayerMask CounterLayerMask; 
     [SerializeField] private Transform PlayerTopPoint; 
@@ -29,15 +30,17 @@ public class Player : MonoBehaviour,IKitchenObjectParent
     private BaseCounter selectedCounter;
     private bool isWalking;
     private KitChenObject kitchenObject;
-    
     private void Awake()
-    {   
+    {
         // Instance = this;
-        characterController=GetComponent<CharacterController>();
-        playerInput.OnInteraction+= GameInput_Onteraction;
-        playerInput.OnInteractAlternal+=GameInput_OnInteracAlternal;
+        characterController = GetComponent<CharacterController>(); 
     }
 
+    private void Start()
+    {
+        PlayerInput.Instance.OnInteraction+= GameInput_Onteraction;
+        PlayerInput.Instance.OnInteractAlternal+=GameInput_OnInteracAlternal;
+    }
     private void GameInput_OnInteracAlternal(object sender, EventArgs e)
     {   
         if(!GameManager.Instance.IsGamePlaying()) return;
@@ -57,12 +60,18 @@ public class Player : MonoBehaviour,IKitchenObjectParent
     // Update is called once per frame
     private void Update()
     {
+        if (!IsOwner)
+        {
+            return;
+        }
         HandleMoveInput();
         HandleInteract();
     }
+   
 
+   
     private void HandleInteract(){
-        Vector2 inputVector=playerInput.GetMovementVectorNormolized();
+        Vector2 inputVector=PlayerInput.Instance.GetMovementVectorNormolized();
         Vector3 moveDir=new Vector3(inputVector.x,0,inputVector.y);
 
         if(moveDir!=Vector3.zero){
@@ -87,7 +96,7 @@ public class Player : MonoBehaviour,IKitchenObjectParent
     }
 
     private void HandleMoveInput(){
-        UnityEngine.Vector2 inputVector = playerInput.GetMovementVectorNormolized();
+        UnityEngine.Vector2 inputVector = PlayerInput.Instance.GetMovementVectorNormolized();
         UnityEngine.Vector3 moveDir = new UnityEngine.Vector3(inputVector.x,0f,inputVector.y);
         float moveDistance = moveSpeed*Time.deltaTime;
         float playerHeight=2f;
