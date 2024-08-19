@@ -8,5 +8,6 @@ public class ResetStaticData : MonoBehaviour
     BaseCounter.resetEventStatic();
     TrashCounter.resetEventStatic();
     CuttingCounter.resetEventStatic();
+    Player.resetEventStatic();
    }
 }

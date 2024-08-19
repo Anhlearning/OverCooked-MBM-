@@ -9,9 +9,15 @@ using UnityEngine.InputSystem;
 using System;
 using Unity.Netcode;
 using System.Globalization;
+using Unity.VisualScripting;
 public class Player : NetworkBehaviour,IKitchenObjectParent
 {
     // Start is called before the first frame update
+     public static void resetEventStatic(){
+        OnAnySpawnPlayer=null;
+    }
+    public static event EventHandler OnAnySpawnPlayer;
+    public static event EventHandler OnAnyPlayerPickup;
     public event EventHandler PickUpObject;
     public event EventHandler<OnSelectedCounterChangeEventArgs> OnSelectedCounterChange;
 
@@ -19,8 +25,7 @@ public class Player : NetworkBehaviour,IKitchenObjectParent
     {
         public BaseCounter selectedCounter;
     }
-    //public static Player Instance {get;private set;}
-    //[SerializeField] private PlayerInput playerInput;
+    public static Player InstanceLocal {get;private set;}
     [SerializeField] private float moveSpeed=7f;
     [SerializeField] private LayerMask CounterLayerMask; 
     [SerializeField] private Transform PlayerTopPoint; 
@@ -32,10 +37,14 @@ public class Player : NetworkBehaviour,IKitchenObjectParent
     private KitChenObject kitchenObject;
     private void Awake()
     {
-        // Instance = this;
         characterController = GetComponent<CharacterController>(); 
     }
-
+    public override void OnNetworkSpawn(){
+        if(IsOwner){
+            InstanceLocal=this;
+        }
+        OnAnySpawnPlayer?.Invoke(this,EventArgs.Empty);
+    }
     private void Start()
     {
         PlayerInput.Instance.OnInteraction+= GameInput_Onteraction;
@@ -145,6 +154,7 @@ public class Player : NetworkBehaviour,IKitchenObjectParent
         this.kitchenObject=kitChenObject;
         if(kitchenObject !=null){
             PickUpObject?.Invoke(this,EventArgs.Empty);
+            OnAnyPlayerPickup?.Invoke(this,EventArgs.Empty);
         }
     }
     public KitChenObject GetKitchenObject(){

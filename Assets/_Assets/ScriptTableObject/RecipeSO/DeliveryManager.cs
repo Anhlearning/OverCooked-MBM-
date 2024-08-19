@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class DeliveryManager : MonoBehaviour
+using Unity.Netcode;
+public class DeliveryManager: NetworkBehaviour 
 {   
     public event EventHandler DeliveryFalied;
     public event EventHandler DeliverySuccees;
@@ -24,17 +24,24 @@ public class DeliveryManager : MonoBehaviour
        
     }
     private void Update() {
+        if(!IsServer){
+            return ;
+        }
         timeSpawnRecipe-=Time.deltaTime;
         if(timeSpawnRecipe<=0f){
             timeSpawnRecipe=timeSpawnRecipeMax;
             if(GameManager.Instance.IsGamePlaying()&&wattingRecipeSOList.Count < wattingRecipeSpawnMax){
-                RecipeSO recipeSOSpawn = recipeSOList.RecipeListSO[UnityEngine.Random.Range(0,recipeSOList.RecipeListSO.Count)];
-                Debug.Log(recipeSOSpawn.RecipeName); 
-                wattingRecipeSOList.Add(recipeSOSpawn);
-                OnSpawnRecipe?.Invoke(this,EventArgs.Empty);
+                int recipeIdx=UnityEngine.Random.Range(0,recipeSOList.RecipeListSO.Count);
+                OnSpawnRecipeClientRpc(recipeIdx);
             }
             
         }
+    }
+    [ClientRpc]
+    private void OnSpawnRecipeClientRpc(int indexRecipe){
+        RecipeSO recipeSOSpawn = recipeSOList.RecipeListSO[indexRecipe];
+        wattingRecipeSOList.Add(recipeSOSpawn);
+        OnSpawnRecipe?.Invoke(this,EventArgs.Empty);
     }
 
     public void DeliveryRecipe(PlatesKitchenObject platesKitchenObject){
@@ -57,17 +64,31 @@ public class DeliveryManager : MonoBehaviour
                     }
                 }
                 if(checkKitchenObjectList){
-                    Debug.Log("Recipe Correct");
-                    OnRemoveRecipe?.Invoke(this,EventArgs.Empty);
-                    DeliverySuccees?.Invoke(this,EventArgs.Empty);
-                    recipeDelivery++;
-                    wattingRecipeSOList.RemoveAt(i);
+                    DeliveryCorrectServerRpc(i);
                     return;
                 }
             }
         }
-        DeliveryFalied?.Invoke(this,EventArgs.Empty);
-        Debug.Log("Recipe Give DeliveryCounter Not correct");
+        DeliveryFaliedServerRpc();        
+    }
+    [ServerRpc(RequireOwnership =false)]
+    private void DeliveryCorrectServerRpc(int index){
+        DeliveryCorrectClientRpc(index);
+    }
+    [ClientRpc]
+    private void DeliveryCorrectClientRpc(int index){
+        wattingRecipeSOList.RemoveAt(index);
+        recipeDelivery++;
+        OnRemoveRecipe?.Invoke(this,EventArgs.Empty);
+        DeliverySuccees?.Invoke(this,EventArgs.Empty);
+    }
+    [ServerRpc(RequireOwnership =false)]
+    private void DeliveryFaliedServerRpc(){
+        DeliveryFaliedClientRpc();
+    }
+    [ClientRpc]
+    private void DeliveryFaliedClientRpc(){
+         DeliveryFalied?.Invoke(this,EventArgs.Empty);
     }
     public List<RecipeSO> GetListRecipeSO(){
         return wattingRecipeSOList;

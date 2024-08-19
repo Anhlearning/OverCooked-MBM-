@@ -17,7 +17,7 @@ public class SoundManager : MonoBehaviour
         volume=PlayerPrefs.GetFloat(PLAYER_PREFS_SOUND_EFFECT_VOLUME,1f);
     }
     private void Start() {
-        //Player.Instance.PickUpObject+=Player_PickUpObject;
+        Player.OnAnyPlayerPickup+=Player_PickUpObject;
         DeliveryManager.Instance.DeliveryFalied+=DeliveryManager_DeliveryFalied;
         DeliveryManager.Instance.DeliverySuccees+=DeliveryManager_DeliverySuccees;
         CuttingCounter.AnyOnCut+=CuttingCounter_AnyOnCut;
@@ -38,8 +38,9 @@ public class SoundManager : MonoBehaviour
     }
 
     private void Player_PickUpObject(object sender, System.EventArgs e)
-    {
-       // PlaySound(audioClipRefSO.objectPickup,Player.Instance.transform.position);
+    {   
+        Player player = sender as Player;
+       PlaySound(audioClipRefSO.objectPickup,player.transform.position);
     }
 
     private void CuttingCounter_AnyOnCut(object sender, System.EventArgs e)

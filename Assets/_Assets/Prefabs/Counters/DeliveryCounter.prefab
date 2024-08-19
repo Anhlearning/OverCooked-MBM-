@@ -517,7 +517,7 @@ MonoBehaviour:
   BgImage: {fileID: 5338488192616144787}
   iconImage: {fileID: 1026686647764156122}
   textMess: {fileID: 594000551404325058}
-  colorSucces: {r: 0, g: 0.6745098, b: 0.043137256, a: 0}
+  colorSucces: {r: 0, g: 0.6745098, b: 0.043137256, a: 1}
   colorfalied: {r: 1, g: 0.12833521, b: 0, a: 1}
   spriteSucces: {fileID: 21300000, guid: 6c562ac6d3e47ff4794df31886c6d864, type: 3}
   spriteFalied: {fileID: 21300000, guid: 0d6e1281049dccc4189bf308b2ccf331, type: 3}

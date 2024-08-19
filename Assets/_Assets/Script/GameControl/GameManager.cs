@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -23,6 +24,7 @@ public class GameManager : MonoBehaviour
     private bool isPause=false;
     private void Awake() {
         Instance=this;
+
         state=State.WattingToStart;
     }
     private void Start() {
@@ -35,7 +37,6 @@ public class GameManager : MonoBehaviour
 
     private void GameManager_OnInteract(object sender, EventArgs e)
     {
-        Debug.Log("Game Interact Press E");
         if(state==State.WattingToStart){
             state=State.CountdownToStart;
             OnStateChange?.Invoke(this,EventArgs.Empty);
@@ -99,5 +100,8 @@ public class GameManager : MonoBehaviour
     }
     public float GetGamePlayingTimerNomolized(){
         return 1-(gamePlaying/gamePlayingMax);
+    }
+    public State GetState(){
+        return state;
     }
 }
