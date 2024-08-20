@@ -241,7 +241,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3812876574508226176}
+  - component: {fileID: 396365869820625367}
   - component: {fileID: -3887497998835207607}
+  - component: {fileID: -9091952980514040279}
   m_Layer: 0
   m_Name: Plate_Visual
   m_TagString: Untagged
@@ -266,6 +268,27 @@ Transform:
   - {fileID: 9186052557113018887}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &396365869820625367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3812876574508226177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 1836874656
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!114 &-3887497998835207607
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -286,6 +309,18 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f6a29279ce98e4d42a5ffc393fee12da, type: 2}
   - {fileID: 11400000, guid: a5d6dfd7e0a573842bad4a76309ce386, type: 2}
   - {fileID: 11400000, guid: ec8c862502be72247bc79d28626565e5, type: 2}
+--- !u!114 &-9091952980514040279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3812876574508226177}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5fec1c6d4391b641be94dace1652067, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3889681070115280422
 GameObject:
   m_ObjectHideFlags: 0
@@ -574,7 +609,78 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlateCompleteVisual
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 408889407006782757, guid: 10e39c981f2de6441b54efde32ced8f0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 520990054798219565, guid: 10e39c981f2de6441b54efde32ced8f0,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1836874656
+      objectReference: {fileID: 0}
+    - target: {fileID: 836267920703060385, guid: 10e39c981f2de6441b54efde32ced8f0,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1836874656
+      objectReference: {fileID: 0}
+    - target: {fileID: 3252510514156462646, guid: 10e39c981f2de6441b54efde32ced8f0,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1836874656
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550707550894988255, guid: 10e39c981f2de6441b54efde32ced8f0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550707551136013323, guid: 10e39c981f2de6441b54efde32ced8f0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550707552375629789, guid: 10e39c981f2de6441b54efde32ced8f0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550707552397226385, guid: 10e39c981f2de6441b54efde32ced8f0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3550707552663613203, guid: 10e39c981f2de6441b54efde32ced8f0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3611271270719445377, guid: 10e39c981f2de6441b54efde32ced8f0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5678799867905287447, guid: 10e39c981f2de6441b54efde32ced8f0,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1836874656
+      objectReference: {fileID: 0}
+    - target: {fileID: 6060791448849045056, guid: 10e39c981f2de6441b54efde32ced8f0,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1836874656
+      objectReference: {fileID: 0}
+    - target: {fileID: 9106258858060279270, guid: 10e39c981f2de6441b54efde32ced8f0,
+        type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 1836874656
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 6060791448849045056, guid: 10e39c981f2de6441b54efde32ced8f0, type: 3}
+    - {fileID: 520990054798219565, guid: 10e39c981f2de6441b54efde32ced8f0, type: 3}
+    - {fileID: 836267920703060385, guid: 10e39c981f2de6441b54efde32ced8f0, type: 3}
+    - {fileID: 5678799867905287447, guid: 10e39c981f2de6441b54efde32ced8f0, type: 3}
+    - {fileID: 3252510514156462646, guid: 10e39c981f2de6441b54efde32ced8f0, type: 3}
+    - {fileID: 9106258858060279270, guid: 10e39c981f2de6441b54efde32ced8f0, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 408889407006782756, guid: 10e39c981f2de6441b54efde32ced8f0,

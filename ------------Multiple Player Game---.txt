@@ -38,4 +38,8 @@ Note: RPC không đồng bộ hóa được các dữ liệu khác ngoài value 
 -Use static event (OnAnyPlayerSpawned) to check when player Spawn
 -Remove Static event khi load scene
 6.Player Pickup sync
--Create Class and object KitchenGameMultiplayer : NEtworkBehavior (task SpawnKitchenObject)
+-Create Class(Singelton) and object KitchenGameMultiplayer : NEtworkBehavior (task SpawnKitchenObject)
+-Method : spawnKitchenObject,spawnKitchenObjectServerRpc ,GetkitchenObjectIdx,GetKitchenObjectSOfromIdx
+-Note: comment set object parent 
+-Create scriptableObject KitchenObjectList
+- trans IkitchenObject -> networkobject reference 

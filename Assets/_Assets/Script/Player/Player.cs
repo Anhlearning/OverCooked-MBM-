@@ -169,4 +169,9 @@ public class Player : NetworkBehaviour,IKitchenObjectParent
     public Transform GetKitchenObjectTransform(){
         return PlayerTopPoint;
     }
+
+    public NetworkObject GetNetworkObject()
+    {
+        return NetworkObject;
+    }
 }
