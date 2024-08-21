@@ -22,7 +22,7 @@ public class KitchenGameMultiplayer : NetworkBehaviour
         networkObjectKitchen.Spawn(true);
 
         networkObjectReference.TryGet(out NetworkObject kitchenParentNetworkObject);
-       IKitchenObjectParent IkitchenNetworkParent = kitchenParentNetworkObject.GetComponent<IKitchenObjectParent>();
+        IKitchenObjectParent IkitchenNetworkParent = kitchenParentNetworkObject.GetComponent<IKitchenObjectParent>();
 
         KitChenObject kitchenObject = kitchenObjectTrans.GetComponent<KitChenObject>();
         kitchenObject.SetKitchenObjectParent(IkitchenNetworkParent);
@@ -33,4 +33,22 @@ public class KitchenGameMultiplayer : NetworkBehaviour
     private KitchenObjectSO GetKitchenObjectSOFromIdx(int idx){
         return kitchenObjectList.kitchenObjectList[idx];
     }
+    public void DestroyKitchenObject(KitChenObject kitChenObject){
+        DestroyKitchenObjectServerRpc(kitChenObject.NetworkObject);
+    }
+    [ServerRpc(RequireOwnership = false)]
+    private void DestroyKitchenObjectServerRpc(NetworkObjectReference networkObjectReference){
+        networkObjectReference.TryGet(out NetworkObject kitchenNetworkObject);
+        KitChenObject kitChenObject = kitchenNetworkObject.GetComponent<KitChenObject>();
+        ClearkitchenObjectClientRpc(networkObjectReference);
+        kitChenObject.DestroySelf();
+    }
+    [ClientRpc]
+    private void ClearkitchenObjectClientRpc(NetworkObjectReference networkObjectReference){
+        networkObjectReference.TryGet(out NetworkObject kitchenNetworkObject);
+        KitChenObject kitChenObject = kitchenNetworkObject.GetComponent<KitChenObject>();
+    
+        kitChenObject.ClearkitchenObject();
+    }
+    
 }

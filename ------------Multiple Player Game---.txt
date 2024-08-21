@@ -43,3 +43,18 @@ Note: RPC không đồng bộ hóa được các dữ liệu khác ngoài value 
 -Note: comment set object parent 
 -Create scriptableObject KitchenObjectList
 - trans IkitchenObject -> networkobject reference 
+7.Sync SetobjectParent 
+error khi setparent : Invalid parenting , networkobject moved under a non-Networkobject Parent 
+fix : create class followTransform component of kitchenobject 
+-create method setkitchenobjectparentServerRpc and ClientRpc 
+-fix animation visual of containerCounter 
+8.Sync TrashCounter 
+-Fix destroySelf -> Because object destruction is only done on the server, RPC server synchronization is required.
+- Create method static DestroyKitchenObject{KitchenGameMultiplayer.Destroykitchenobject()} Of kitchenObject Class
+-Create method DestroyKitchenObject of KitchenGamemultiplayer (serverRpc) 
+-Sync ClearObjectParent -> broadCast client (Client Rpc)
+9.Sync CuttingCounter
+-Sync Progress 
+-Sync kitchenObject
+Note: Variables referenced on clients during clientRpc broadcasts must be synchronized with each other.
+

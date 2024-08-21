@@ -41,7 +41,7 @@ public class StoveCounter : BaseCounter,IProgressBar
                     progressNomalize=(float)fyringTimer/fyringObjectSO.fyringTimerMax
                     });
                     if(fyringTimer>= fyringObjectSO.fyringTimerMax){
-                        GetKitchenObject().DestroySelf();
+                        KitChenObject.DestroyKitchenObject(GetKitchenObject());
                         KitChenObject.SpawnKitchenObject(fyringObjectSO.output,this);
                         burnedKitchenSO=GettingBurnedKitchen(fyringObjectSO.output);
                         state=State.Fired;
@@ -57,7 +57,7 @@ public class StoveCounter : BaseCounter,IProgressBar
                         progressNomalize=(float)BurningTimer/burnedKitchenSO.fyringTimerMax
                     });
                     if(BurningTimer >= burnedKitchenSO.fyringTimerMax){
-                        GetKitchenObject().DestroySelf();
+                        KitChenObject.DestroyKitchenObject(GetKitchenObject());
                         KitChenObject.SpawnKitchenObject(burnedKitchenSO.output,this);
                         state=State.Burned;
                         BurningTimer=0f;
@@ -93,7 +93,7 @@ public class StoveCounter : BaseCounter,IProgressBar
             if(player.HasIsKitchenObject()){
                   if(player.GetKitchenObject().TryGetPlate( out PlatesKitchenObject plateKitchenObject)){
                     if(plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO())){
-                        GetKitchenObject().DestroySelf();
+                        KitChenObject.DestroyKitchenObject(GetKitchenObject());
                         state=State.Idle;
                         ProgressBar?.Invoke(this,new IProgressBar.ProgressBarEvent{
                             progressNomalize=0f

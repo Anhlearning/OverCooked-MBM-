@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class CuttingCounter : BaseCounter,IProgressBar
@@ -19,18 +20,19 @@ public class CuttingCounter : BaseCounter,IProgressBar
     public override void Interact(Player player){
         if(!HasIsKitchenObject()){
             if(player.HasIsKitchenObject() && HasKitchenCuttingSO(player.GetKitchenObject().GetKitchenObjectSO())){
-                player.GetKitchenObject().SetKitchenObjectParent(this);
-                cuttingKitchenSO = GettingCuttingKichen(GetKitchenObject().GetKitchenObjectSO());
-                ProgressBar?.Invoke(this,new IProgressBar.ProgressBarEvent{
-                    progressNomalize=(float)CuttingProgess/cuttingKitchenSO.CuttingProgess
-                });
+                KitChenObject kitChenObject = player.GetKitchenObject();
+                //trong single player thì mình setkitchenobjectparent thì kitchenobject sẽ được set ngay lập tức và kitchenobject từ null -> not null ngay lập tức  
+                kitChenObject.SetKitchenObjectParent(this);
+                //=>>> getkitchenobject trong single nó sẽ not null ngay lập tức khi setkitchenobjectparent 
+                cuttingKitchenSO = GettingCuttingKichen(kitChenObject.GetKitchenObjectSO());
+                InteractLogicPlaceObjectOnCounterServerRpc();
             }
         }
         else {
             if(player.HasIsKitchenObject()){
                   if(player.GetKitchenObject().TryGetPlate( out PlatesKitchenObject plateKitchenObject)){
                     if(plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectSO())){
-                        GetKitchenObject().DestroySelf();
+                        KitChenObject.DestroyKitchenObject(GetKitchenObject());
                     }
                 }
             }
@@ -42,25 +44,46 @@ public class CuttingCounter : BaseCounter,IProgressBar
             }
         }
     }
-
-
+    [ServerRpc(RequireOwnership =false)]
+    private void InteractLogicPlaceObjectOnCounterServerRpc(){
+        InteractLogicPlaceObjectOnCounterClientRpc();
+    }
+    [ClientRpc]
+    private void InteractLogicPlaceObjectOnCounterClientRpc(){
+        CuttingProgess=0;    
+        ProgressBar?.Invoke(this,new IProgressBar.ProgressBarEvent{
+            progressNomalize=0f
+        });
+    }
     public override void InteractAlternate(Player player)
     {
-         if(HasIsKitchenObject() && HasKitchenCuttingSO(GetKitchenObject().GetKitchenObjectSO())){
-                CuttingProgess++;
-                OnCut?.Invoke(this,EventArgs.Empty);
-                AnyOnCut?.Invoke(this,EventArgs.Empty);
-                // cuttingKitchenSO = GettingCuttingKichen(GetKitchenObject().GetKitchenObjectSO());
-                 ProgressBar?.Invoke(this,new IProgressBar.ProgressBarEvent{
-                    progressNomalize=(float)CuttingProgess/cuttingKitchenSO.CuttingProgess
-                });
-                if(CuttingProgess >= cuttingKitchenSO.CuttingProgess){
-                    GetKitchenObject().DestroySelf();
-                    CuttingProgess=0;
-                    KitChenObject.SpawnKitchenObject(cuttingKitchenSO.outputKitchen,this);
-               }
-
+        if(HasIsKitchenObject() && HasKitchenCuttingSO(GetKitchenObject().GetKitchenObjectSO())){
+                CutObjectServerRpc();
+                TestCuttingDoneProgressServerRpc();
          }
+    }
+    [ServerRpc(RequireOwnership = false)]
+    private void CutObjectServerRpc(){  
+        CutobjectClientRpc();
+    }
+    [ClientRpc]
+    private void CutobjectClientRpc(){
+        CuttingProgess++;
+        OnCut?.Invoke(this,EventArgs.Empty);
+        AnyOnCut?.Invoke(this,EventArgs.Empty);
+        cuttingKitchenSO = GettingCuttingKichen(GetKitchenObject().GetKitchenObjectSO());
+        ProgressBar?.Invoke(this,new IProgressBar.ProgressBarEvent{
+            progressNomalize=(float)CuttingProgess/cuttingKitchenSO.CuttingProgess
+        });
+    }
+    [ServerRpc(RequireOwnership = false)]
+    private void TestCuttingDoneProgressServerRpc(){
+        cuttingKitchenSO = GettingCuttingKichen(GetKitchenObject().GetKitchenObjectSO());
+        if(CuttingProgess >= cuttingKitchenSO.CuttingProgess){
+            KitChenObject.DestroyKitchenObject(GetKitchenObject());
+            CuttingProgess=0;
+            KitChenObject.SpawnKitchenObject(cuttingKitchenSO.outputKitchen,this);
+        }
     }
 
     private bool HasKitchenCuttingSO(KitchenObjectSO  kitchenObjectSO){
