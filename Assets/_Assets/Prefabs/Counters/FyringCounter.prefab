@@ -775,11 +775,11 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6068937693337029390, guid: 61aead9f0ca95e243b3a4d2cbce1bc68,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 9205506739558535382}
+      addedObject: {fileID: 7585909135859624987}
     - targetCorrespondingSourceObject: {fileID: 6068937693337029390, guid: 61aead9f0ca95e243b3a4d2cbce1bc68,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7585909135859624987}
+      addedObject: {fileID: 9205506739558535382}
   m_SourcePrefab: {fileID: 100100000, guid: 61aead9f0ca95e243b3a4d2cbce1bc68, type: 3}
 --- !u!4 &302324257538125943 stripped
 Transform:
@@ -799,6 +799,27 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4142210504588879974}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7585909135859624987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7873739297100948328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 340837035
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!114 &9205506739558535382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -816,27 +837,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 58410d349f055de47b834014f5faf154, type: 2}
   burnedObjectArrays:
   - {fileID: 11400000, guid: 5ff34b8d2bc8de8439a3beff37945cb8, type: 2}
---- !u!114 &7585909135859624987
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7873739297100948328}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 0
-  InScenePlacedSourceGlobalObjectIdHash: 0
-  AlwaysReplicateAsRoot: 0
-  SynchronizeTransform: 1
-  ActiveSceneSynchronization: 0
-  SceneMigrationSynchronization: 1
-  SpawnWithObservers: 1
-  DontDestroyWithOwner: 0
-  AutoObjectParentSync: 1
 --- !u!1001 &7186945342132892147
 PrefabInstance:
   m_ObjectHideFlags: 0

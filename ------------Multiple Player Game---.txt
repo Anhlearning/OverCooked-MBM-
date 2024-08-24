@@ -57,4 +57,5 @@ fix : create class followTransform component of kitchenobject
 -Sync Progress 
 -Sync kitchenObject
 Note: Variables referenced on clients during clientRpc broadcasts must be synchronized with each other.
-
+10.Sync StoveCounter
+-Use network Variable and Delegate OnValueChange 

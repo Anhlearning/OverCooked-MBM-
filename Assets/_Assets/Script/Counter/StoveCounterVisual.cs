@@ -11,7 +11,7 @@ public class StoveCounterVisual : MonoBehaviour
     private bool onFryring;
     private void Start()
     {
-        stoveCounter.OnFryring+=OnFryringChange;
+        stoveCounter.OnStateChange+=OnFryringChange;
     }
 
     private void OnFryringChange(object sender, StoveCounter.OnStateChangeEvents e)

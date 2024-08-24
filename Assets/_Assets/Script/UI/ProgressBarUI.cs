@@ -23,7 +23,7 @@ public class ProgressBarUI : MonoBehaviour
     {
         Bar.fillAmount=e.progressNomalize;
 
-        if(e.progressNomalize == 0 || e.progressNomalize ==1){
+        if(e.progressNomalize == 0f || e.progressNomalize == 1f){
             gameObject.SetActive(false);
         }
         else {

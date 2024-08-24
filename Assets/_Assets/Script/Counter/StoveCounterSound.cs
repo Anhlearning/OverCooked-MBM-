@@ -15,7 +15,7 @@ public class StoveCounterSound : MonoBehaviour
     }
 
     private void Start() {
-        stoveCounter.OnFryring+=stoveCounter_OnFryingSound;
+        stoveCounter.OnStateChange+=stoveCounter_OnFryingSound;
         stoveCounter.ProgressBar += StoveCounter_OnSoundWarning;
     }
 
