@@ -19,13 +19,12 @@ public class TutorialsUI : MonoBehaviour
     }
     private void Awake() {
         PlayerInput.Instance.OnChangeBinding += KeyUI_ChangeBinding;
-        GameManager.Instance.OnStateChange += KeyUI_OnStateChange;        
+        GameManager.Instance.OnLocalPlayerReady += GameManager_OnLocalPlayerReady;     
     }
 
-    private void KeyUI_OnStateChange(object sender, EventArgs e)
+    private void GameManager_OnLocalPlayerReady(object sender, EventArgs e)
     {
-        // Debug.Log(GameManager.Instance.GetState());
-        if(GameManager.Instance.IsCountDownToStart()){
+        if(GameManager.Instance.IsLocalPlayerReady()){
             Hide();
         }
     }

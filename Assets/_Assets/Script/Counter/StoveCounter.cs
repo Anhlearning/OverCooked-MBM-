@@ -44,11 +44,6 @@ public class StoveCounter : BaseCounter,IProgressBar
         OnStateChange?.Invoke(this,new OnStateChangeEvents{
             state=state.Value
         });
-        if(newValue == State.Idle || newValue == State.Burned){
-            ProgressBar?.Invoke(this,new IProgressBar.ProgressBarEvent{
-                progressNomalize = 0
-            });
-        }
     }
     
     private void BurningTimer_OnvalueChange(float previousValue, float newValue)
@@ -77,7 +72,7 @@ public class StoveCounter : BaseCounter,IProgressBar
                 case State.Idle:
                     break; 
                 case State.Fyring:
-                    fyringTimer.Value+=Time.deltaTime;
+                    fyringTimer.Value += Time.deltaTime;
                     if(fyringTimer.Value > fyringObjectSO.fyringTimerMax){
                         KitChenObject.DestroyKitchenObject(GetKitchenObject());
                         KitChenObject.SpawnKitchenObject(fyringObjectSO.output,this);
