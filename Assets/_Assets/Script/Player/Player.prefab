@@ -81,7 +81,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 2533111030
+  GlobalObjectIdHash: 1139243178
   InScenePlacedSourceGlobalObjectIdHash: 0
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
@@ -107,6 +107,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   PlayerTopPoint: {fileID: 3018853366662826002}
+  SpawnPlayerPos:
+  - {x: -2, y: 0, z: 0}
+  - {x: 2, y: 0, z: 2}
+  - {x: -2, y: 0, z: -2}
+  - {x: 2, y: 0, z: 0}
 --- !u!143 &1385459838773003260
 CharacterController:
   m_ObjectHideFlags: 0

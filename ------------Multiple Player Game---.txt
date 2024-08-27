@@ -60,3 +60,5 @@ Note: Variables referenced on clients during clientRpc broadcasts must be synchr
 10.Sync StoveCounter
 -Use network Variable and Delegate OnValueChange 
 -fyringTimer,BruningTimer,state -> Network Variable 
+11.Sync State Game 
+-Use ServerPara 

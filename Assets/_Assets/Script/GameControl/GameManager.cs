@@ -9,6 +9,8 @@ public class GameManager : NetworkBehaviour
 {
     public event EventHandler OnPauseMenu;
     public event EventHandler OffPauseMenu;
+    public event EventHandler OnMultiplayerPause;
+    public event EventHandler UnMultiplayerPause;
     public static GameManager Instance {get;set;}
     public event EventHandler OnStateChange;
     public event EventHandler OnLocalPlayerReady;
@@ -23,25 +25,83 @@ public class GameManager : NetworkBehaviour
     private NetworkVariable<float> gamePlaying=new NetworkVariable<float>(300f);
     private float gamePlayingMax=300f;
 
-    private bool isLocalPlayerReady;
-    private bool isPause=false;
+    private bool isLocalPlayerReady=false;
+    private bool isLocalPause=false;
+    private bool isClientDisconnet=false;
+    private NetworkVariable<bool>isPause=new NetworkVariable<bool>(false);
 
     private Dictionary<ulong,bool>playerReadyDictionary;
+    private Dictionary<ulong,bool>playerPauseDictionary;
     private void Awake() {
         Instance=this;
         playerReadyDictionary=new Dictionary<ulong, bool>();
+        playerPauseDictionary=new Dictionary<ulong, bool>();
     }
     
     private void Start() {
         PlayerInput.Instance.OnPauseGame += PlayerInput_Pause; 
         PlayerInput.Instance.OnInteraction += GameManager_OnInteract;
 
-        // state=State.CountdownToStart;
-        // OnStateChange?.Invoke(this,EventArgs.Empty);
+
     }
     public override void OnNetworkSpawn()
     {
         state.OnValueChanged += GameManager_OnStateChange;
+        isPause.OnValueChanged += GameManager_OnPauseChange;
+
+        if (NetworkManager.Singleton == null || !NetworkManager.Singleton.IsListening) {
+            return;  // Đảm bảo rằng NetworkManager đã được khởi tạo và đang lắng nghe trước khi thay đổi NetworkVariable
+        }
+        if(IsServer){
+            NetworkManager.Singleton.OnClientDisconnectCallback += GameManager_OnClientDisconnect;
+        }
+    }
+    private void Update() {
+        if(!NetworkManager.Singleton.IsServer ){
+            return ;
+        }
+        switch (state.Value)
+        {
+            case State.WattingToStart:
+            break;
+            case State.CountdownToStart:
+            countdowToStart.Value-=Time.deltaTime;
+            if(countdowToStart.Value <=0){
+                state.Value=State.GammePlaying;
+                gamePlaying.Value=gamePlayingMax;
+            }
+            break;
+            case State.GammePlaying:
+            gamePlaying.Value-=Time.deltaTime;
+            if(gamePlaying.Value<=0){
+                state.Value=State.GameOver; 
+            }
+            break;
+            case State.GameOver:
+            break;
+        }
+    }
+    private void LateUpdate() {
+        if(isClientDisconnet){
+            isClientDisconnet=false;
+            TestGamePauseState();
+        }
+    }
+    private void GameManager_OnClientDisconnect(ulong obj)
+    {
+        isClientDisconnet=true;
+    }
+
+    private void GameManager_OnPauseChange(bool previousValue, bool newValue)
+    {
+        if(isPause.Value==true){
+            Time.timeScale=0;
+            OnMultiplayerPause?.Invoke(this,EventArgs.Empty);
+        }
+        else {
+            Time.timeScale=1;
+            UnMultiplayerPause?.Invoke(this,EventArgs.Empty);
+        }
     }
 
     private void GameManager_OnStateChange(State previousValue, State newValue)
@@ -67,7 +127,6 @@ public class GameManager : NetworkBehaviour
                 break;
             }
         }
-        UnityEngine.Debug.Log(allClientReady);
         if(allClientReady==true){
             state.Value=State.CountdownToStart;
         }
@@ -80,40 +139,35 @@ public class GameManager : NetworkBehaviour
 
     public void TogglePause()
     {
-        isPause=!isPause;
-        if(isPause){
+        isLocalPause=!isLocalPause;
+        if(isLocalPause){
             OnPauseMenu?.Invoke(this,EventArgs.Empty);
-            Time.timeScale=0;
+           PauseGameServerRpc();
         }
         else {
             OffPauseMenu?.Invoke(this,EventArgs.Empty);
-            Time.timeScale=1;
+           UnPauseGameServerRpc();
         }
     }
-    private void Update() {
-        if(!IsServer){
-            return ;
-        }
-        switch (state.Value)
-        {
-            case State.WattingToStart:
-            break;
-            case State.CountdownToStart:
-            countdowToStart.Value-=Time.deltaTime;
-            if(countdowToStart.Value <=0){
-                state.Value=State.GammePlaying;
-                gamePlaying.Value=gamePlayingMax;
+
+    [ServerRpc(RequireOwnership =false)]
+    private void PauseGameServerRpc(ServerRpcParams serverRpcParams = default){
+        playerPauseDictionary[serverRpcParams.Receive.SenderClientId]=true;
+        TestGamePauseState();
+    }
+    [ServerRpc(RequireOwnership = false)]
+    private void UnPauseGameServerRpc(ServerRpcParams serverRpcParams = default){
+        playerPauseDictionary[serverRpcParams.Receive.SenderClientId]=false;
+        TestGamePauseState();
+    }
+    private void TestGamePauseState(){
+        foreach (ulong IdClient in NetworkManager.Singleton.ConnectedClientsIds){
+            if(playerPauseDictionary.ContainsKey(IdClient) && playerPauseDictionary[IdClient]){
+                isPause.Value=true;
+                return;
             }
-            break;
-            case State.GammePlaying:
-            gamePlaying.Value-=Time.deltaTime;
-            if(gamePlaying.Value<=0){
-                state.Value=State.GameOver; 
-            }
-            break;
-            case State.GameOver:
-            break;
         }
+        isPause.Value=false;
     }
     public bool IsGamePlaying(){
         return state.Value==State.GammePlaying;

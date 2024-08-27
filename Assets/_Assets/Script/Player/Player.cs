@@ -29,6 +29,7 @@ public class Player : NetworkBehaviour,IKitchenObjectParent
     [SerializeField] private float moveSpeed=7f;
     [SerializeField] private LayerMask CounterLayerMask; 
     [SerializeField] private Transform PlayerTopPoint; 
+    [SerializeField] private List<Vector3> SpawnPlayerPos;
     private CharacterController characterController;
 
     private Vector3 lastInteractDir;
@@ -38,15 +39,29 @@ public class Player : NetworkBehaviour,IKitchenObjectParent
     private void Awake()
     {
         characterController = GetComponent<CharacterController>(); 
+
     }
     public override void OnNetworkSpawn(){
         if(IsOwner){
             InstanceLocal=this;
         }
         OnAnySpawnPlayer?.Invoke(this,EventArgs.Empty);
+        transform.position=SpawnPlayerPos[(int)OwnerClientId];
+        if(IsServer){
+            NetworkManager.Singleton.OnClientDisconnectCallback += Player_OnDisconnect;
+        }
     }
+
+    private void Player_OnDisconnect(ulong IdClient)
+    {
+        if(IdClient == OwnerClientId && HasIsKitchenObject()){
+            KitChenObject.DestroyKitchenObject(GetKitchenObject());
+        }
+    }
+
     private void Start()
     {
+        Debug.Log(OwnerClientId + " "+ NetworkManager.ServerClientId);
         PlayerInput.Instance.OnInteraction+= GameInput_Onteraction;
         PlayerInput.Instance.OnInteractAlternal+=GameInput_OnInteracAlternal;
     }

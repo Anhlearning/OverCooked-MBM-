@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,6 +14,7 @@ public class PauseMenuUI : MonoBehaviour
 
     private void Awake() {
         MenuGame.onClick.AddListener(()=>{
+            NetworkManager.Singleton.Shutdown();
             Loader.Load(Loader.Scene.GameMenu);
         });
         Resume.onClick.AddListener(()=>{

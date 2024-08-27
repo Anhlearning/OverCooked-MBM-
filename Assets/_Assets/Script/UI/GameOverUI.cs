@@ -2,15 +2,22 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameOverUI : MonoBehaviour
 {
     // Start is called before the first frame update
     [SerializeField] private TextMeshProUGUI textRecipeDelivery;
+    [SerializeField] private Button playAgainBtn;
     private void Start()
     {
         GameManager.Instance.OnStateChange+=GameOverUI_OnStateChange;
+        playAgainBtn.onClick.AddListener(()=>{
+            Loader.Load(Loader.Scene.GameMenu);
+            NetworkManager.Singleton.Shutdown();
+        });
         Hide();
     }
 
