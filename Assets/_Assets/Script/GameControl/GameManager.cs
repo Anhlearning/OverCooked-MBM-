@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : NetworkBehaviour
 {
@@ -32,6 +33,7 @@ public class GameManager : NetworkBehaviour
 
     private Dictionary<ulong,bool>playerReadyDictionary;
     private Dictionary<ulong,bool>playerPauseDictionary;
+    [SerializeField] private Transform Player;
     private void Awake() {
         Instance=this;
         playerReadyDictionary=new Dictionary<ulong, bool>();
@@ -54,8 +56,19 @@ public class GameManager : NetworkBehaviour
         }
         if(IsServer){
             NetworkManager.Singleton.OnClientDisconnectCallback += GameManager_OnClientDisconnect;
+            NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += GameManager_OnLoadEventComplete; 
         }
     }
+
+    private void GameManager_OnLoadEventComplete(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut)
+    {
+        foreach (ulong ClientId in NetworkManager.Singleton.ConnectedClientsIds)
+        {
+            Transform playerSpawn = Instantiate(Player);
+            playerSpawn.GetComponent<NetworkObject>().SpawnAsPlayerObject(ClientId,true);
+        }
+    }
+
     private void Update() {
         if(!NetworkManager.Singleton.IsServer ){
             return ;
@@ -187,6 +200,9 @@ public class GameManager : NetworkBehaviour
     }
     public State GetState(){
         return state.Value;
+    }
+    public bool isWattingToStart(){
+        return state.Value == State.WattingToStart;
     }
     public bool IsLocalPlayerReady(){
         return isLocalPlayerReady;

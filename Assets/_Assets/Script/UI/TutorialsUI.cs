@@ -16,6 +16,7 @@ public class TutorialsUI : MonoBehaviour
     
     private void Start() {
         UpdateVisual();
+        Show();
     }
     private void Awake() {
         PlayerInput.Instance.OnChangeBinding += KeyUI_ChangeBinding;

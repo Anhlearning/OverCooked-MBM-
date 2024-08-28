@@ -13,12 +13,12 @@ public class NetworkManagerUI : MonoBehaviour
         ClientBtn.onClick.AddListener(() =>
         {
             Debug.Log("CLIENT");
-            NetworkManager.Singleton.StartClient(); 
+            KitchenGameMultiplayer.Instance.StartClient();
             hide();
         });
         HostBtn.onClick.AddListener(() => {
             Debug.Log("HOST");
-            NetworkManager.Singleton.StartHost();
+            KitchenGameMultiplayer.Instance.StartHost();
             hide(); 
         });
     }

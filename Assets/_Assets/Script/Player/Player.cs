@@ -61,7 +61,7 @@ public class Player : NetworkBehaviour,IKitchenObjectParent
 
     private void Start()
     {
-        Debug.Log(OwnerClientId + " "+ NetworkManager.ServerClientId);
+        // Debug.Log(OwnerClientId + " "+ NetworkManager.ServerClientId);
         PlayerInput.Instance.OnInteraction+= GameInput_Onteraction;
         PlayerInput.Instance.OnInteractAlternal+=GameInput_OnInteracAlternal;
     }
@@ -188,5 +188,8 @@ public class Player : NetworkBehaviour,IKitchenObjectParent
     public NetworkObject GetNetworkObject()
     {
         return NetworkObject;
+    }
+    public ulong GetClientId(){
+        return OwnerClientId;
     }
 }
