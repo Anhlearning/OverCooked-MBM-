@@ -62,3 +62,13 @@ Note: Variables referenced on clients during clientRpc broadcasts must be synchr
 -fyringTimer,BruningTimer,state -> Network Variable 
 11.Sync State Game 
 -Use ServerPara 
+12.Sync Flow 
+13.Character Selected 
+--Create object CharacterSelected UI 
+	+ MainMenu Button
+	+ Ready	Button
+--Edit Scene
+-Create Script CharacterSelectedPlayer 
+-Create Data Type PlayerData:Iequatable<PlayData>,InetworkSerializeble ( ulong clientId)
+-Crete networkList<PlayerData> in KitchenGameMultiplayer
+

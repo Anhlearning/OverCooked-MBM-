@@ -12,11 +12,22 @@ public class KitchenGameMultiplayer : NetworkBehaviour
 
     public event EventHandler OnTryingToJoinGame;
     public event EventHandler OnFailToJoinGame;
+    public event EventHandler OnPlayerDataNetworkChange;
     private const int MAXPLAYERJOINGAME=4;
+    private NetworkList<PlayerData>PlayerDataNetworkList;
     [SerializeField] private KitchenObjectList kitchenObjectList;
+    [SerializeField] private List<Color> playerColorList;
+
     private void Awake() {
         Instance=this;
+        PlayerDataNetworkList=new NetworkList<PlayerData>();
+        PlayerDataNetworkList.OnListChanged += PlayerDataList_ChangeValue;
         DontDestroyOnLoad(gameObject);
+    }
+
+    private void PlayerDataList_ChangeValue(NetworkListEvent<PlayerData> changeEvent)
+    {
+        OnPlayerDataNetworkChange?.Invoke(this,EventArgs.Empty);
     }
 
     public void StartClient(){
@@ -32,7 +43,15 @@ public class KitchenGameMultiplayer : NetworkBehaviour
 
     public void StartHost(){
         NetworkManager.Singleton.ConnectionApprovalCallback += NetworkManager_ConnectionApprovalCallback;
+        NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
         NetworkManager.Singleton.StartHost();
+    }
+
+    private void NetworkManager_OnClientConnectedCallback(ulong ClientId)
+    {   
+        PlayerDataNetworkList.Add(new PlayerData {
+            ClientId=ClientId
+        });
     }
 
     private void NetworkManager_ConnectionApprovalCallback(NetworkManager.ConnectionApprovalRequest connectionApprovalRequest, NetworkManager.ConnectionApprovalResponse connectionApprovalResponse)
@@ -91,4 +110,13 @@ public class KitchenGameMultiplayer : NetworkBehaviour
         kitChenObject.ClearkitchenObject();
     }
     
+    public bool IsPlayerIndexConnected(int playerIndex){
+        return PlayerDataNetworkList.Count > playerIndex;
+    }
+    public PlayerData GetPlayerDataFromIndex(int playerIndex){
+        return PlayerDataNetworkList[playerIndex];
+    }
+    public Color GetPlayerColor(int ColorId){
+        return playerColorList[ColorId];
+    }
 }

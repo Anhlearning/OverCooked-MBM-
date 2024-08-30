@@ -1,19 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class SelectedCharacterReady : NetworkBehaviour
 {
     private Dictionary<ulong,bool>playerReadyDictionary;
     
     public static SelectedCharacterReady Instance;
+    public event EventHandler OnPlayerReadyChange;
     private void Awake() {
         Instance=this;
+        playerReadyDictionary = new Dictionary<ulong, bool>();
     }
     private void Start()
     {
-        playerReadyDictionary = new Dictionary<ulong, bool>();
+        
     }
 
     public void SetPlayerReady(){
@@ -23,6 +27,7 @@ public class SelectedCharacterReady : NetworkBehaviour
     [ServerRpc(RequireOwnership =false)]
     private void SetPlayerReadyServerRpc(ServerRpcParams serverRpcParams = default){
         playerReadyDictionary[serverRpcParams.Receive.SenderClientId]=true;
+        ClientIdIsReadyClientRpc(serverRpcParams.Receive.SenderClientId);
         bool allClientReady=true;
         foreach(ulong IdClient in NetworkManager.Singleton.ConnectedClientsIds){
             if(!playerReadyDictionary.ContainsKey(IdClient) || !playerReadyDictionary[IdClient]){
@@ -34,9 +39,16 @@ public class SelectedCharacterReady : NetworkBehaviour
             Loader.NetworkLoad(Loader.Scene.GamePlay);
         }
     }
-    // Update is called once per frame
-    void Update()
-    {
-        
+    [ClientRpc]
+    private void ClientIdIsReadyClientRpc(ulong ClientId){
+       
+        playerReadyDictionary[ClientId]=true;
+        OnPlayerReadyChange?.Invoke(this,EventArgs.Empty);
+    }
+    public bool IsPlayerReady(ulong ClientId){
+        if(playerReadyDictionary.ContainsKey(ClientId)){
+            return  playerReadyDictionary[ClientId];
+        }
+        return false;
     }
 }
