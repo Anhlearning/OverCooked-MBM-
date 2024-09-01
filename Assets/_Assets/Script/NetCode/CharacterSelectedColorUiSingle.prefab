@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4193950610536552391}
   - component: {fileID: 5235561583032474917}
   - component: {fileID: 7024805581035361011}
+  - component: {fileID: 8752217750833963647}
   m_Layer: 5
   m_Name: CharacterSelectedColorUiSingle
   m_TagString: Untagged
@@ -121,6 +122,21 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &8752217750833963647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5866072339445476601}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d043042e9293ef498a805f83c3af665, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  colorId: 0
+  image: {fileID: 5235561583032474917}
+  selected: {fileID: 8247254289570112842}
 --- !u!1 &8247254289570112842
 GameObject:
   m_ObjectHideFlags: 0

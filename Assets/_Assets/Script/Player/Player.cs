@@ -30,6 +30,7 @@ public class Player : NetworkBehaviour,IKitchenObjectParent
     [SerializeField] private LayerMask CounterLayerMask; 
     [SerializeField] private Transform PlayerTopPoint; 
     [SerializeField] private List<Vector3> SpawnPlayerPos;
+    [SerializeField]private PlayerVisual playerVisual;
     private CharacterController characterController;
 
     private Vector3 lastInteractDir;
@@ -46,7 +47,7 @@ public class Player : NetworkBehaviour,IKitchenObjectParent
             InstanceLocal=this;
         }
         OnAnySpawnPlayer?.Invoke(this,EventArgs.Empty);
-        transform.position=SpawnPlayerPos[(int)OwnerClientId];
+        transform.position=SpawnPlayerPos[(int)KitchenGameMultiplayer.Instance.GetPlayerDataIndexFromClientId(OwnerClientId)];
         if(IsServer){
             NetworkManager.Singleton.OnClientDisconnectCallback += Player_OnDisconnect;
         }
@@ -64,6 +65,8 @@ public class Player : NetworkBehaviour,IKitchenObjectParent
         // Debug.Log(OwnerClientId + " "+ NetworkManager.ServerClientId);
         PlayerInput.Instance.OnInteraction+= GameInput_Onteraction;
         PlayerInput.Instance.OnInteractAlternal+=GameInput_OnInteracAlternal;
+        PlayerData playerData = KitchenGameMultiplayer.Instance.GetPlayerDataFromClientId(OwnerClientId);
+        playerVisual.SetPlayerColor(KitchenGameMultiplayer.Instance.GetPlayerColor(playerData.colorId));
     }
     private void GameInput_OnInteracAlternal(object sender, EventArgs e)
     {   

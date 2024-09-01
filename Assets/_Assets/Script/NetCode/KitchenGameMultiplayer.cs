@@ -43,14 +43,26 @@ public class KitchenGameMultiplayer : NetworkBehaviour
 
     public void StartHost(){
         NetworkManager.Singleton.ConnectionApprovalCallback += NetworkManager_ConnectionApprovalCallback;
+        NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManagerHost_OnclientDisconnectCallback;
         NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
         NetworkManager.Singleton.StartHost();
+    }
+
+    private void NetworkManagerHost_OnclientDisconnectCallback(ulong ClientId)
+    {
+        for(int i=0 ; i < PlayerDataNetworkList.Count;i++){
+            PlayerData playerData = PlayerDataNetworkList[i];
+            if(playerData.ClientId==ClientId){
+                PlayerDataNetworkList.RemoveAt(i);
+            }
+        }
     }
 
     private void NetworkManager_OnClientConnectedCallback(ulong ClientId)
     {   
         PlayerDataNetworkList.Add(new PlayerData {
-            ClientId=ClientId
+            ClientId=ClientId,
+            colorId=GetFirstUnusedColorId()
         });
     }
 
@@ -118,5 +130,58 @@ public class KitchenGameMultiplayer : NetworkBehaviour
     }
     public Color GetPlayerColor(int ColorId){
         return playerColorList[ColorId];
+    }
+    public PlayerData GetPlayerDataFromClientId(ulong ClientId){
+        foreach(PlayerData playerData in PlayerDataNetworkList){
+            if(playerData.ClientId==ClientId){
+                return playerData;
+            }
+        }
+        return default;
+    }
+    public PlayerData GetPlayerData(){
+       return  GetPlayerDataFromClientId(NetworkManager.Singleton.LocalClientId);
+    }
+    public void ChangePlayerColor(int colorId){
+        ChangePlayerColorServerRpc(colorId);
+    }
+    public int GetPlayerDataIndexFromClientId(ulong ClientId){
+        for(int i=0 ; i < PlayerDataNetworkList.Count;i++){
+            if(PlayerDataNetworkList[i].ClientId == ClientId){
+                return i;
+            }
+        }
+        return -1;
+    }
+    [ServerRpc(RequireOwnership = false)]
+    private void ChangePlayerColorServerRpc(int colorid, ServerRpcParams serverRpcParams=default){
+        if(!IsColorAvailable(colorid)){
+            return ; 
+        }
+        int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
+        PlayerData playerData = PlayerDataNetworkList[playerDataIndex];
+        playerData.colorId=colorid;
+        PlayerDataNetworkList[playerDataIndex]=playerData;
+
+    }
+    private bool IsColorAvailable(int colorId){
+        foreach(PlayerData playerData in PlayerDataNetworkList){
+            if(playerData.colorId == colorId){
+                return false;
+            }
+        }
+        return true;
+    }
+    private int GetFirstUnusedColorId(){
+        for(int i=0;i< playerColorList.Count;i++){
+            if(IsColorAvailable(i)){
+                return i;
+            }
+        }
+        return -1;
+    }
+    public void KickPlayer(ulong ClientId){
+        NetworkManager.Singleton.DisconnectClient(ClientId);
+        NetworkManagerHost_OnclientDisconnectCallback(ClientId);
     }
 }
