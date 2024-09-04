@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using Unity.Netcode;
 using Unity.Networking.Transport.Error;
+using Unity.Services.Authentication;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,13 +16,16 @@ public class KitchenGameMultiplayer : NetworkBehaviour
     public event EventHandler OnFailToJoinGame;
     public event EventHandler OnPlayerDataNetworkChange;
     public const int MAXPLAYERJOINGAME=4;
+    private const string PLAYER_NAME_MULTIPLAYER="PLAYERNAME";
     private NetworkList<PlayerData>PlayerDataNetworkList;
+    private string playerName;
     [SerializeField] private KitchenObjectList kitchenObjectList;
     [SerializeField] private List<Color> playerColorList;
 
     private void Awake() {
         Instance=this;
         PlayerDataNetworkList=new NetworkList<PlayerData>();
+        playerName=PlayerPrefs.GetString(PLAYER_NAME_MULTIPLAYER,"PLAYER "+UnityEngine.Random.Range(10,100));
         PlayerDataNetworkList.OnListChanged += PlayerDataList_ChangeValue;
         DontDestroyOnLoad(gameObject);
     }
@@ -29,11 +34,39 @@ public class KitchenGameMultiplayer : NetworkBehaviour
     {
         OnPlayerDataNetworkChange?.Invoke(this,EventArgs.Empty);
     }
+    public string GetPlayerName(){
+        return playerName;
+    }
+    public void SetPlayerName(string playerName){
+        this.playerName=playerName;
+        PlayerPrefs.SetString(PLAYER_NAME_MULTIPLAYER,playerName);
+    }
 
     public void StartClient(){
         OnTryingToJoinGame?.Invoke(this,EventArgs.Empty);
         NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnclientDissconnect;
+        NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_Client_OnClientConnected;
         NetworkManager.Singleton.StartClient();
+    }
+
+    private void NetworkManager_Client_OnClientConnected(ulong obj)
+    {
+        SetPlayerNameServerRpc(GetPlayerName());
+        SetPlayerIDServerRpc(AuthenticationService.Instance.PlayerId);
+    }
+    [ServerRpc(RequireOwnership =false)]
+    private void SetPlayerNameServerRpc(string playerName,ServerRpcParams serverRpcParams=default){
+        int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
+        PlayerData playerData = PlayerDataNetworkList[playerDataIndex];
+        playerData.playerName=playerName;
+        PlayerDataNetworkList[playerDataIndex]=playerData;
+    }
+     [ServerRpc(RequireOwnership =false)]
+    private void SetPlayerIDServerRpc(string playerId,ServerRpcParams serverRpcParams=default){
+        int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
+        PlayerData playerData = PlayerDataNetworkList[playerDataIndex];
+        playerData.playerId=playerId;
+        PlayerDataNetworkList[playerDataIndex]=playerData;
     }
 
     private void NetworkManager_OnclientDissconnect(ulong obj)
@@ -44,7 +77,7 @@ public class KitchenGameMultiplayer : NetworkBehaviour
     public void StartHost(){
         NetworkManager.Singleton.ConnectionApprovalCallback += NetworkManager_ConnectionApprovalCallback;
         NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManagerHost_OnclientDisconnectCallback;
-        NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
+        NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_Host_OnClientConnectedCallBack;
         NetworkManager.Singleton.StartHost();
     }
 
@@ -58,12 +91,15 @@ public class KitchenGameMultiplayer : NetworkBehaviour
         }
     }
 
-    private void NetworkManager_OnClientConnectedCallback(ulong ClientId)
+    private void NetworkManager_Host_OnClientConnectedCallBack(ulong ClientId)
     {   
         PlayerDataNetworkList.Add(new PlayerData {
             ClientId=ClientId,
             colorId=GetFirstUnusedColorId()
         });
+        SetPlayerNameServerRpc(GetPlayerName()); 
+        SetPlayerIDServerRpc(AuthenticationService.Instance.PlayerId);
+
     }
 
     private void NetworkManager_ConnectionApprovalCallback(NetworkManager.ConnectionApprovalRequest connectionApprovalRequest, NetworkManager.ConnectionApprovalResponse connectionApprovalResponse)

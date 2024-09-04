@@ -87,4 +87,42 @@ public class KitchenGameLobby : MonoBehaviour
             throw;
         }
     }
+    public async void LeaveLobby(){
+        if(joinedLobby !=null){
+        try
+        {
+            await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id,AuthenticationService.Instance.PlayerId);
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.Log(e);
+            throw;
+        }    
+    }    
+    }
+    public async void KickPlayer(string playerId){
+        if(IsLobbyHost()){
+        try
+        {
+            await LobbyService.Instance.RemovePlayerAsync(joinedLobby.Id,playerId);
+        }
+        catch (LobbyServiceException e)
+        {
+            Debug.Log(e);
+            throw;
+        }    
+    }    
+    }
+    public async void DeleteLobby(){
+        if(joinedLobby !=null){
+            try
+            {
+                await LobbyService.Instance.DeleteLobbyAsync(joinedLobby.Id);
+            }
+            catch (LobbyServiceException e)
+            {
+                Debug.Log(e);
+            }
+        }
+    }
 }

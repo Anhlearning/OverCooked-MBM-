@@ -36,6 +36,7 @@ public class SelectedCharacterReady : NetworkBehaviour
             }
         }
         if(allClientReady==true){
+            KitchenGameLobby.Instance.DeleteLobby();
             Loader.NetworkLoad(Loader.Scene.GamePlay);
         }
     }
