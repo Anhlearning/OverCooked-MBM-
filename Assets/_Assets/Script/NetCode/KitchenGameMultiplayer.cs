@@ -13,7 +13,7 @@ public class KitchenGameMultiplayer : NetworkBehaviour
     public event EventHandler OnTryingToJoinGame;
     public event EventHandler OnFailToJoinGame;
     public event EventHandler OnPlayerDataNetworkChange;
-    private const int MAXPLAYERJOINGAME=4;
+    public const int MAXPLAYERJOINGAME=4;
     private NetworkList<PlayerData>PlayerDataNetworkList;
     [SerializeField] private KitchenObjectList kitchenObjectList;
     [SerializeField] private List<Color> playerColorList;

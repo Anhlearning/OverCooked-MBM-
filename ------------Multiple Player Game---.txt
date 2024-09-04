@@ -71,4 +71,6 @@ Note: Variables referenced on clients during clientRpc broadcasts must be synchr
 -Create Script CharacterSelectedPlayer 
 -Create Data Type PlayerData:Iequatable<PlayData>,InetworkSerializeble ( ulong clientId)
 -Crete networkList<PlayerData> in KitchenGameMultiplayer
-
+14.Setup-Lobby
+-Install package Lobby 
+-Setup ProjectSetting
