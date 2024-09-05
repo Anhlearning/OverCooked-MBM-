@@ -74,3 +74,9 @@ Note: Variables referenced on clients during clientRpc broadcasts must be synchr
 14.Setup-Lobby
 -Install package Lobby 
 -Setup ProjectSetting
+-Create Initialize
+-Create Lobby,JoinLobby,kickplayer,LeaveLobby
+-Create Message when joinlobby and CreateLobby
+-Create Filter Query
+
+
