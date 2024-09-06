@@ -69,6 +69,11 @@ public class LobbyMessage : MonoBehaviour
     }
     // Update is called once per frame
     private void OnDestroy() {
-         KitchenGameMultiplayer.Instance.OnFailToJoinGame -= KitchenGameMultiplayer_OnFailToJoinGame;
+        KitchenGameMultiplayer.Instance.OnFailToJoinGame -= KitchenGameMultiplayer_OnFailToJoinGame;
+        KitchenGameLobby.Instance.OnCreateLobby -= KitchenGameLobby_OnCreateLobby;
+        KitchenGameLobby.Instance.OnCreateLobbyFailed -= KitchenGameLobby_OnCreateLobbyFailed;
+        KitchenGameLobby.Instance.OnJoinLobby -= KitchenGameLobby_OnJoinLobby;
+        KitchenGameLobby.Instance.OnQuickJoinLobbyFailed -= KitchenGameLobby_OnQuickJoinFailed;
+        KitchenGameLobby.Instance.OnJoinFailed -= KitchenGameLobby_OnJoinFailed;
     }
 }

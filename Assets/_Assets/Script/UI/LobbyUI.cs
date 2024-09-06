@@ -64,6 +64,9 @@ public class LobbyUI : MonoBehaviour
         }
 
     }
+    private void OnDestroy() {
+        KitchenGameLobby.Instance.OnLobbyListChanged -= KitchenGameLobby_OnLobbyListChange;
+    }
     // Update is called once per frame
     void Update()
     {
