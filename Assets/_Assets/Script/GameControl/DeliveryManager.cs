@@ -75,6 +75,7 @@ public class DeliveryManager: NetworkBehaviour
     private void DeliveryCorrectServerRpc(int index){
         DeliveryCorrectClientRpc(index);
     }
+    
     [ClientRpc]
     private void DeliveryCorrectClientRpc(int index){
         wattingRecipeSOList.RemoveAt(index);

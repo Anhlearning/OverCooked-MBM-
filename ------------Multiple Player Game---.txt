@@ -81,4 +81,4 @@ Note: Variables referenced on clients during clientRpc broadcasts must be synchr
 15.Relay
 -Create AllcateRelay return Allocation 
 -Create method getJoinCodeAsync-relay
-
+- 2 best way use setRelay 
