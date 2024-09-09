@@ -11,9 +11,11 @@ public class DeliveryCounter : BaseCounter
     public override void Interact(Player player)
     {
         if(!HasIsKitchenObject()){
+            if (player.GetKitchenObject() == null){
+                return ;
+            }
             if(player.GetKitchenObject().TryGetPlate(out PlatesKitchenObject platesKitchenObject)){
                 DeliveryManager.Instance.DeliveryRecipe(platesKitchenObject);
-
                 KitChenObject.DestroyKitchenObject(player.GetKitchenObject());
             }
         }

@@ -19,6 +19,7 @@ public class GameManager : NetworkBehaviour
         WattingToStart,
         CountdownToStart,
         GammePlaying,
+        GameSucces,
         GameOver
     }
     private NetworkVariable<State> state=new NetworkVariable<State>(State.WattingToStart);
@@ -43,8 +44,6 @@ public class GameManager : NetworkBehaviour
     private void Start() {
         PlayerInput.Instance.OnPauseGame += PlayerInput_Pause; 
         PlayerInput.Instance.OnInteraction += GameManager_OnInteract;
-
-
     }
     public override void OnNetworkSpawn()
     {
@@ -86,9 +85,14 @@ public class GameManager : NetworkBehaviour
             break;
             case State.GammePlaying:
             gamePlaying.Value-=Time.deltaTime;
-            if(gamePlaying.Value<=0){
+            if(DeliveryManager.Instance.GetRecipeDelivery()==DeliveryManager.Instance.GetRecipeDeliveryMax()){
+                state.Value=State.GameSucces;
+            }
+            else if(gamePlaying.Value<=0){
                 state.Value=State.GameOver; 
             }
+            break;
+            case State.GameSucces:
             break;
             case State.GameOver:
             break;
@@ -194,6 +198,9 @@ public class GameManager : NetworkBehaviour
     }
     public bool IsGameOver(){
         return state.Value==State.GameOver;
+    }
+    public bool IsGameSucces(){
+        return state.Value==State.GameSucces;
     }
     public float GetGamePlayingTimerNomolized(){
         return 1-(gamePlaying.Value/gamePlayingMax);

@@ -9,6 +9,7 @@ public class DeliveryManager: NetworkBehaviour
     public event EventHandler DeliverySuccees;
     public event EventHandler OnSpawnRecipe;
     public event EventHandler OnRemoveRecipe;
+    public event EventHandler OnRecipeUpdateChange;
 
     public static DeliveryManager Instance{get;set;}  
     [SerializeField] private RecipeSOList recipeSOList;
@@ -16,13 +17,22 @@ public class DeliveryManager: NetworkBehaviour
     private float timeSpawnRecipe=4f;
     private float timeSpawnRecipeMax=4f;
     private int wattingRecipeSpawnMax=4;
-    private int recipeDelivery;
+    private NetworkVariable<int> recipeDelivery=new NetworkVariable<int>(0);
+    private int maxRecipeDelivery=4;
 
     private void Awake() {
         Instance=this;
         wattingRecipeSOList=new List<RecipeSO>();
+
+        recipeDelivery.OnValueChanged += DeliveryRecipe_ChangeValue;
        
     }
+
+    private void DeliveryRecipe_ChangeValue(int previousValue, int newValue)
+    {
+        OnRecipeUpdateChange?.Invoke(this,EventArgs.Empty);
+    }
+
     private void Update() {
         if(!IsServer){
             return ;
@@ -74,12 +84,12 @@ public class DeliveryManager: NetworkBehaviour
     [ServerRpc(RequireOwnership =false)]
     private void DeliveryCorrectServerRpc(int index){
         DeliveryCorrectClientRpc(index);
+        recipeDelivery.Value++;
     }
     
     [ClientRpc]
     private void DeliveryCorrectClientRpc(int index){
         wattingRecipeSOList.RemoveAt(index);
-        recipeDelivery++;
         OnRemoveRecipe?.Invoke(this,EventArgs.Empty);
         DeliverySuccees?.Invoke(this,EventArgs.Empty);
     }
@@ -95,6 +105,9 @@ public class DeliveryManager: NetworkBehaviour
         return wattingRecipeSOList;
     }
     public int GetRecipeDelivery(){
-        return recipeDelivery;
+        return recipeDelivery.Value;
+    }
+    public int GetRecipeDeliveryMax(){
+        return maxRecipeDelivery;
     }
 }

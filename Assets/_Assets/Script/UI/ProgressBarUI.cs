@@ -22,7 +22,6 @@ public class ProgressBarUI : MonoBehaviour
     private void ProgressBar_OnChange(object sender, IProgressBar.ProgressBarEvent e)
     {
         Bar.fillAmount=e.progressNomalize;
-        Debug.Log(e.progressNomalize);
         if(e.progressNomalize == 0f || e.progressNomalize == 1f){
             gameObject.SetActive(false);
         }
